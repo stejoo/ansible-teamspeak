@@ -6,9 +6,9 @@ After=network.target
 Type=simple
 User={{ teamspeak.user }}
 Group={{ teamspeak.user }}
-WorkingDirectory={{ teamspeak.home }}/teamspeak3-server_linux_amd64-{{ teamspeak.version }}/teamspeak3-server_linux_amd64
-Environment='LD_LIBRARY_PATH="{{ teamspeak.home }}/teamspeak3-server_linux_amd64-{{ teamspeak.version }}/teamspeak3-server_linux_amd64/:$LD_LIBRARY_PATH"'
-ExecStart={{ teamspeak.home }}/teamspeak3-server_linux_amd64-{{ teamspeak.version }}/teamspeak3-server_linux_amd64/ts3server_minimal_runscript.sh
+WorkingDirectory={{ teamspeak.home }}/{{ teamspeak.symlink }}
+Environment='LD_LIBRARY_PATH="{{ teamspeak.home }}/{{ teamspeak.symlink }}:$LD_LIBRARY_PATH"'
+ExecStart={{ teamspeak.home }}/{{ teamspeak.symlink }}/ts3server_minimal_runscript.sh
 
 [Install]
 WantedBy=multi-user.target

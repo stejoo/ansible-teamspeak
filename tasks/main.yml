@@ -54,6 +54,24 @@
   tags:
     - teamspeak
 
+# Updater idea
+# 1. Check if user files exist under symlinked directory.
+# 2.   true? Copy user files to directory of new TeamSpeak3 server version.
+# 3. Stop currently running TeamSpeak 3 Server (under symlinked directory).
+# 4. Create/Update symlink
+# 5.   notify systemd of the update
+# 6. Start new TeamSpeak 3 server
+
+- name: Create/Update symlink to TeamSpeak 3 server {{ teamspeak.version }}
+  file:
+    src: "{{ teamspeak.home }}/teamspeak3-server_linux_amd64-{{ teamspeak.version }}/teamspeak3-server_linux_amd64"
+    dest: "{{ teamspeak.home }}/{{ teamspeak.symlink }}"
+    state: link
+    owner: "{{ teamspeak.user }}"
+    group: "{{ teamspeak.user }}"
+  tags:
+    - teamspeak
+
 - name: Add TeamSpeak 3 systemctl service file
   template:
     src: teamspeak3-server.service.j2
