@@ -79,6 +79,14 @@
     mode: 0644
     owner: root
     group: root
+  notify:
+    - reload systemd
+  tags:
+    - teamspeak
+
+# Perform the "reload systemd" handler now.
+# Before we start using the new/changed .service file.
+- meta: flush_handlers
   tags:
     - teamspeak
 
