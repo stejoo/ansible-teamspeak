@@ -1,2 +1,5 @@
 ---
 # handlers file for teamspeak
+
+- name: reload systemd
+  command: systemctl daemon-reload
