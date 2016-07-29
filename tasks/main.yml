@@ -1,0 +1,73 @@
+---
+# tasks file for teamspeak
+
+- name: "Load OS specific variables"
+  include_vars: "{{ item }}"
+  with_first_found: 
+    - files: 
+        - "{{ ansible_distribution|lower }}.yml"
+        - "{{ ansible_os_family|lower }}.yml"
+        - "{{ ansible_system|lower }}.yml"
+        - main.yml
+      paths: 
+        - ../vars
+  tags:
+    - teamspeak
+
+- name: Create Teamspeak user
+  user:
+    name: "{{ teamspeak.user }}"
+    comment: "{{ teamspeak.comment }}"
+    home: "{{ teamspeak.home }}"
+    shell: "{{ teamspeak.shell }}"
+    system: yes
+  tags:
+    - teamspeak
+
+- name: Download TeamSpeak 3 server files
+  get_url:
+    url: "http://dl.4players.de/ts/releases/{{ teamspeak.version }}/teamspeak3-server_linux_amd64-{{ teamspeak.version }}.tar.bz2"
+    dest: "{{ teamspeak.home }}/teamspeak3-server_linux_amd64-{{ teamspeak.version }}.tar.bz2"
+    checksum: "{{ teamspeak.checksum }}"
+    owner: "{{ teamspeak.user }}"
+    group: "{{ teamspeak.user }}"
+  tags:
+    - teamspeak
+
+- name: Create TeamSpeak 3 server directory
+  file:
+    path: "{{ teamspeak.home}}/teamspeak3-server_linux_amd64-{{ teamspeak.version }}"
+    state: directory
+    owner: "{{ teamspeak.user }}"
+    group: "{{ teamspeak.user }}"
+  tags:
+    - teamspeak
+
+- name: Extract TeamSpeak 3 server files
+  unarchive:
+    copy: no
+    src: "{{ teamspeak.home }}/teamspeak3-server_linux_amd64-{{ teamspeak.version }}.tar.bz2"
+    dest: "{{ teamspeak.home }}/teamspeak3-server_linux_amd64-{{ teamspeak.version }}/"
+    creates: "{{ teamspeak.home }}/teamspeak3-server_linux_amd64-{{ teamspeak.version }}/teamspeak3-server_linux_amd64"
+    owner: "{{ teamspeak.user }}"
+    group: "{{ teamspeak.user }}"
+  tags:
+    - teamspeak
+
+- name: Add TeamSpeak 3 systemctl service file
+  template:
+    src: teamspeak3-server.service.j2
+    dest: "{{ systemd_service_file_path }}/teamspeak3-server.service"
+    mode: 0644
+    owner: root
+    group: root
+  tags:
+    - teamspeak
+
+- name: Enable and start TeamSpeak 3 server
+  service:
+    name: teamspeak3-server
+    state: started
+    enabled: yes
+  tags:
+    - teamspeak
