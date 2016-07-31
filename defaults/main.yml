@@ -6,6 +6,6 @@ teamspeak:
   comment: "Teamspeak 3 user"
   home: "/opt/teamspeak"
   shell: "/usr/sbin/nologin"
-  symlink: "teamspeak3-server"
+  symlink: "current"
   version: "3.0.12.4"
   checksum: "sha256:6bb0e8c8974fa5739b90e1806687128342b3ab36510944f576942e67df7a1bd9"

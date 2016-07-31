@@ -18,8 +18,9 @@ defaults/main.yml:
 * teamspeak.comment: User comment field. Defaults to "Teamspeak 3 user".
 * teamspeak.home: Home directory for the teamspeak user. Will also be used to install the teamspeak server in. Defaults to "/opt/teamspeak".
 * teamspeak.shell: Shell for the teamspeak user. Defaults to "/usr/sbin/nologin".
+* teamspeak.symlink: Name of symlink to point to current TeamSpeak 3 server directory. Defaults to "current".
 * teamspeak.version: Version of Teamspeak 3 Server to install. Defaults to "3.0.12.4".
-* teamspeak.checksum: "sha256:6bb0e8c8974fa5739b90e1806687128342b3ab36510944f576942e67df7a1bd9"
+* teamspeak.checksum: SHA256 checksum of archive of TeamSpeak 3 server version for verification purposes. Example: "sha256:6bb0e8c8974fa5739b90e1806687128342b3ab36510944f576942e67df7a1bd9"
 
 vars/{debian,redhat}.yml:
 
@@ -28,7 +29,7 @@ vars/{debian,redhat}.yml:
 Dependencies
 ------------
 
-No other dependencies I am aware of.
+rsync should be installed on the host to perform TeamSpeak 3 Server upgrades, used by the "synchronize" module.
 
 Example Playbook
 ----------------

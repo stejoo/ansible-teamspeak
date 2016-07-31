@@ -24,7 +24,7 @@
   tags:
     - teamspeak
 
-- name: Download TeamSpeak 3 server files
+- name: Download TeamSpeak {{ teamspeak.version }} server files
   get_url:
     url: "http://dl.4players.de/ts/releases/{{ teamspeak.version }}/teamspeak3-server_linux_amd64-{{ teamspeak.version }}.tar.bz2"
     dest: "{{ teamspeak.home }}/teamspeak3-server_linux_amd64-{{ teamspeak.version }}.tar.bz2"
@@ -34,37 +34,60 @@
   tags:
     - teamspeak
 
-- name: Create TeamSpeak 3 server directory
+- name: Create TeamSpeak {{ teamspeak.version }} server directory
   file:
     path: "{{ teamspeak.home}}/teamspeak3-server_linux_amd64-{{ teamspeak.version }}"
     state: directory
     owner: "{{ teamspeak.user }}"
     group: "{{ teamspeak.user }}"
+  register: mkdir
   tags:
     - teamspeak
 
-- name: Extract TeamSpeak 3 server files
+# If a new directory has been created, check for (current) user data.
+- name: Checking for a currently installed TeamSpeak 3 server with user data
+  stat:
+    path: "{{ teamspeak.home }}/{{ teamspeak.symlink }}/teamspeak3-server_linux_amd64/files"
+  register: userdata
+  when: mkdir.changed
+  tags:
+    - teamspeak
+
+# If user data has been found, this is an upgrade situation.
+# Stop, copy current and extract newer on top.
+- name: Stop currently running TeamSpeak 3 server instance
+  service:
+    name: teamspeak3-server
+    state: stopped
+  when: userdata.stat.exists is defined and userdata.stat.exists == True
+  tags:
+    - teamspeak
+
+- name: Copy existing TeamSpeak 3 server data to new TeamSpeak {{ teamspeak.version }} server directory
+  synchronize:
+    src: "{{ teamspeak.home }}/{{ teamspeak.symlink }}/teamspeak3-server_linux_amd64/"
+    dest: "{{ teamspeak.home }}/teamspeak3-server_linux_amd64-{{ teamspeak.version }}/teamspeak3-server_linux_amd64/"
+  delegate_to: "{{ inventory_hostname }}"
+  when: userdata.stat.exists is defined and userdata.stat.exists == True
+  notify:
+    - Prune older TeamSpeak 3 server versions
+  tags:
+    - teamspeak
+
+- name: Extract TeamSpeak {{ teamspeak.version }} server files
   unarchive:
     copy: no
     src: "{{ teamspeak.home }}/teamspeak3-server_linux_amd64-{{ teamspeak.version }}.tar.bz2"
     dest: "{{ teamspeak.home }}/teamspeak3-server_linux_amd64-{{ teamspeak.version }}/"
-    creates: "{{ teamspeak.home }}/teamspeak3-server_linux_amd64-{{ teamspeak.version }}/teamspeak3-server_linux_amd64"
     owner: "{{ teamspeak.user }}"
     group: "{{ teamspeak.user }}"
+  when: mkdir.changed
   tags:
     - teamspeak
 
-# Updater idea
-# 1. Check if user files exist under symlinked directory.
-# 2.   true? Copy user files to directory of new TeamSpeak3 server version.
-# 3. Stop currently running TeamSpeak 3 Server (under symlinked directory).
-# 4. Create/Update symlink
-# 5.   notify systemd of the update
-# 6. Start new TeamSpeak 3 server
-
-- name: Create/Update symlink to TeamSpeak 3 server {{ teamspeak.version }}
+- name: Create/Update symlink to TeamSpeak {{ teamspeak.version }} server
   file:
-    src: "{{ teamspeak.home }}/teamspeak3-server_linux_amd64-{{ teamspeak.version }}/teamspeak3-server_linux_amd64"
+    src: "{{ teamspeak.home }}/teamspeak3-server_linux_amd64-{{ teamspeak.version }}"
     dest: "{{ teamspeak.home }}/{{ teamspeak.symlink }}"
     state: link
     owner: "{{ teamspeak.user }}"
@@ -72,7 +95,7 @@
   tags:
     - teamspeak
 
-- name: Add TeamSpeak 3 systemctl service file
+- name: Install TeamSpeak 3 systemctl service file
   template:
     src: teamspeak3-server.service.j2
     dest: "{{ systemd_service_file_path }}/teamspeak3-server.service"
@@ -80,11 +103,11 @@
     owner: root
     group: root
   notify:
-    - reload systemd
+    - Reload systemd
   tags:
     - teamspeak
 
-# Perform the "reload systemd" handler now.
+# Perform the "Reload systemd" (and possibly queued clean-up) handler now.
 # Before we start using the new/changed .service file.
 - meta: flush_handlers
   tags:
