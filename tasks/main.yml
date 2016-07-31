@@ -54,26 +54,12 @@
     - teamspeak
 
 # If user data has been found, this is an upgrade situation.
-# Stop, copy current and extract newer on top.
-- name: Stop currently running TeamSpeak 3 server instance
-  service:
-    name: teamspeak3-server
-    state: stopped
+- include: ts3update.yml
   when: userdata.stat.exists is defined and userdata.stat.exists == True
   tags:
     - teamspeak
 
-- name: Copy existing TeamSpeak 3 server data to new TeamSpeak {{ teamspeak.version }} server directory
-  synchronize:
-    src: "{{ teamspeak.home }}/{{ teamspeak.symlink }}/teamspeak3-server_linux_amd64/"
-    dest: "{{ teamspeak.home }}/teamspeak3-server_linux_amd64-{{ teamspeak.version }}/teamspeak3-server_linux_amd64/"
-  delegate_to: "{{ inventory_hostname }}"
-  when: userdata.stat.exists is defined and userdata.stat.exists == True
-  notify:
-    - Prune older TeamSpeak 3 server versions
-  tags:
-    - teamspeak
-
+# Created a new directory? Extract the files into it. Overwrites existing.
 - name: Extract TeamSpeak {{ teamspeak.version }} server files
   unarchive:
     copy: no

@@ -1,0 +1,19 @@
+---
+# tasks file for teamspeak
+
+- name: Stop currently running TeamSpeak 3 server instance
+  service:
+    name: teamspeak3-server
+    state: stopped
+  tags:
+    - teamspeak
+
+- name: Copy existing TeamSpeak 3 server data to new TeamSpeak {{ teamspeak.version }} server directory
+  synchronize:
+    src: "{{ teamspeak.home }}/{{ teamspeak.symlink }}/teamspeak3-server_linux_amd64/"
+    dest: "{{ teamspeak.home }}/teamspeak3-server_linux_amd64-{{ teamspeak.version }}/teamspeak3-server_linux_amd64/"
+  delegate_to: "{{ inventory_hostname }}"
+  notify:
+    - Prune older TeamSpeak 3 server versions
+  tags:
+    - teamspeak
