@@ -78,6 +78,8 @@
     state: link
     owner: "{{ teamspeak.user }}"
     group: "{{ teamspeak.user }}"
+  notify:
+    - Restart TeamSpeak 3 Server
   tags:
     - teamspeak
 
