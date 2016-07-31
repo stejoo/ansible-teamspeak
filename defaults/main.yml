@@ -1,6 +1,6 @@
 ---
 # defaults file for teamspeak
-
+# Installation settings
 teamspeak:
   user: "teamspeak"
   comment: "Teamspeak 3 user"
@@ -9,3 +9,27 @@ teamspeak:
   symlink: "current"
   version: "3.0.12.4"
   checksum: "sha256:6bb0e8c8974fa5739b90e1806687128342b3ab36510944f576942e67df7a1bd9"
+  ini_file: "ts3server.ini" 
+
+teamspeak_ini:
+  # If the IP is set to 
+  voice:
+    ip: 0.0.0.0
+    port: 9987 
+  filetransfer:
+    ip: 0.0.0.0
+    port: 10011 
+  query:
+    ip: 0.0.0.0
+    port: 33003
+  db_plugin: ts3db_sqlite3
+  logpath: /var/log/teamspeak3-server
+  logquerycommands: false
+
+teamspeak_mysql:
+   hostname: localhost
+   post: 3306
+   socket: "" 
+   username: ts3db
+   password: Ts#UsersZwemmenInHetWater
+   database: ts3db

@@ -71,6 +71,9 @@
   tags:
     - teamspeak
 
+- include: config.yml
+  when: teamspeak.ini_file is not none
+
 - name: Create/Update symlink to TeamSpeak {{ teamspeak.version }} server
   file:
     src: "{{ teamspeak.home }}/teamspeak3-server_linux_amd64-{{ teamspeak.version }}"
@@ -108,3 +111,4 @@
     enabled: yes
   tags:
     - teamspeak
+
