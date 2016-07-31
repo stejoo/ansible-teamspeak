@@ -23,6 +23,7 @@ defaults/main.yml:
 * teamspeak.symlink: Name of symlink to point to current TeamSpeak 3 server directory. Defaults to "current".
 * teamspeak.version: Version of Teamspeak 3 Server to install. Defaults to "3.0.12.4".
 * teamspeak.checksum: SHA256 checksum of archive of TeamSpeak 3 server version for verification purposes. Example: "sha256:6bb0e8c8974fa5739b90e1806687128342b3ab36510944f576942e67df7a1bd9"
+* teamspeak.keep: Amount of TeamSpeak 3 server versions to keep installed, includes current version. A setting of "2" keeps the current and one previous version installed.
 
 vars/{debian,redhat}.yml:
 
