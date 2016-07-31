@@ -4,7 +4,9 @@ TeamSpeak 3 Server
 Role that deploys a TeamSpeak 3 server.
 Inspired by [dharmab/ansible-playbooks/roles/teamspeak](https://github.com/dharmab/ansible-playbooks/tree/master/roles/teamspeak).
 
-By incrementing the TeamSpeak 3 version number, and assigning the appropriate SHA256 checksum string, this role can also perform upgrades of TeamSpeak 3 servers. Provided those have been previously installed by this role (starting from this version of the role). CAUTION: Such a procedure is not well tested yet.
+TeamSpeak 3 servers installed with this role can also be updated to newer versions with this role.  
+By incrementing the TeamSpeak 3 version number, and assigning the appropriate SHA256 checksum string, this role will copy your currently installed TeamSpeak 3 server and update it to the new version.  
+Note: this feature has been tested, but is still fairly new.
 
 Requirements
 ------------
