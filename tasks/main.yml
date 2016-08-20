@@ -11,8 +11,6 @@
         - main.yml
       paths: 
         - ../vars
-  tags:
-    - teamspeak
 
 - name: Create Teamspeak user
   user:
@@ -21,8 +19,6 @@
     home: "{{ teamspeak.home }}"
     shell: "{{ teamspeak.shell }}"
     system: yes
-  tags:
-    - teamspeak
 
 - name: Download TeamSpeak {{ teamspeak.version }} server files
   get_url:
@@ -31,8 +27,6 @@
     checksum: "{{ teamspeak.checksum }}"
     owner: "{{ teamspeak.user }}"
     group: "{{ teamspeak.user }}"
-  tags:
-    - teamspeak
 
 - name: Create TeamSpeak {{ teamspeak.version }} server directory
   file:
@@ -41,8 +35,6 @@
     owner: "{{ teamspeak.user }}"
     group: "{{ teamspeak.user }}"
   register: mkdir
-  tags:
-    - teamspeak
 
 # If a new directory has been created, check for (current) user data.
 - name: Checking for a currently installed TeamSpeak 3 server with user data
@@ -50,14 +42,10 @@
     path: "{{ teamspeak.home }}/{{ teamspeak.symlink }}/teamspeak3-server_linux_amd64/files"
   register: userdata
   when: mkdir.changed
-  tags:
-    - teamspeak
 
 # If user data has been found, this is an upgrade situation.
 - include: ts3update.yml
   when: userdata.stat.exists is defined and userdata.stat.exists == True
-  tags:
-    - teamspeak
 
 # Created a new directory? Extract the files into it. Overwrites existing.
 - name: Extract TeamSpeak {{ teamspeak.version }} server files
@@ -68,8 +56,6 @@
     owner: "{{ teamspeak.user }}"
     group: "{{ teamspeak.user }}"
   when: mkdir.changed
-  tags:
-    - teamspeak
 
 
 - name: Create/Update symlink to TeamSpeak {{ teamspeak.version }} server
@@ -81,8 +67,6 @@
     group: "{{ teamspeak.user }}"
   notify:
     - Restart TeamSpeak 3 Server
-  tags:
-    - teamspeak
 
 - include: config.yml
   when: teamspeak.ini_file is not none
@@ -96,20 +80,13 @@
     group: root
   notify:
     - Reload systemd
-  tags:
-    - teamspeak
 
 # Perform the "Reload systemd" (and possibly queued clean-up) handler now.
 # Before we start using the new/changed .service file.
 - meta: flush_handlers
-  tags:
-    - teamspeak
 
 - name: Enable and start TeamSpeak 3 server
   service:
     name: teamspeak3-server
     state: started
     enabled: yes
-  tags:
-    - teamspeak
-
