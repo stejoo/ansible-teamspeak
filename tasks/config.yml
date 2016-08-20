@@ -11,6 +11,7 @@
     mode: 0644
     owner: "{{ teamspeak.user }}"
     group: "{{ teamspeak.user }}"
+  register: ts3server_ini
 
 - name: Create mysql ini file if needed
   template:
@@ -21,13 +22,15 @@
     group: "{{ teamspeak.user }}"
   when: teamspeak_ini.db_plugin == "ts3db_mysql"
 
-- name: Enable and start TeamSpeak 3 server
-  service:
-    name: teamspeak3-server
-    state: stopped 
+- name: Create teamspeak 3 server logs folder 
+  file: path={{ teamspeak_ini.logpath }} state=directory mode=0755 owner={{ teamspeak.user }} group={{ teamspeak.user }}
 
 
 - block:
+    - name: enable and start teamspeak 3 server
+      service:
+        name: teamspeak3-server
+        state: stopped 
     - name: Copy first start script
       copy:
         src: "{{ role_path }}/files/ts3server_first_start.sh"
@@ -47,11 +50,18 @@
 
     - name: Start ts3server for setting config
       become_user: "{{ teamspeak.user }}"
-      shell: "{{ ts3server_dir }}/ts3server_first_start.sh {{ ts3_first_start_args }}"
+      shell: "{{ ts3server_dir }}/ts3server_first_start.sh {{ ts3_first_start_args }} > {{ teamspeak_ini.logpath }}/first_start.log"
+      args:
+        chdir: "{{ teamspeak.home }}/teamspeak3-server_linux_amd64-{{ teamspeak.version }}"
+        creates: "{{ teamspeak_ini.logpath }}/first_start.log" 
+        
+    - name: Grepping token from first start log 
+      shell: "grep -B 1 'token=' {{ teamspeak_ini.logpath }}/first_start.log | sed -r 's .{55}  '"
       args:
         chdir: "{{ teamspeak.home }}/teamspeak3-server_linux_amd64-{{ teamspeak.version }}"
       register: ts3server_first_start
-    
+
     - name: Debug output first start
       debug: var=ts3server_first_start.stdout_lines
 
+  when: ts3server_ini.changed
