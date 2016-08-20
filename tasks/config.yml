@@ -1,32 +1,37 @@
 ---
 # tasks file for teamspeak
+- name: Short facts
+  set_fact:
+    ts3server_dir: "{{ teamspeak.home }}/{{ teamspeak.symlink }}/teamspeak3-server_linux_amd64"
 
 - name: Create ts3server.ini 
   template:
     src: ts3server.ini.j2 
-    dest: "{{ teamspeak.home }}/teamspeak3-server_linux_amd64-{{ teamspeak.version }}/ts3server.ini"
+    dest: "{{ ts3server_dir }}/ts3server.ini"
     mode: 0644
     owner: "{{ teamspeak.user }}"
     group: "{{ teamspeak.user }}"
-  tags:
-    - teamspeak
 
 - name: Create mysql ini file if needed
   template:
     src: ts3db_mysql.ini.j2 
-    dest: "{{ teamspeak.home }}/teamspeak3-server_linux_amd64-{{ teamspeak.version }}/ts3db_mysql.ini"
+    dest: "{{ ts3server_dir }}/ts3db_mysql.ini"
     mode: 0600
     owner: "{{ teamspeak.user }}"
     group: "{{ teamspeak.user }}"
   when: teamspeak_ini.db_plugin == "ts3db_mysql"
-  tags:
-    - teamspeak
+
+- name: Enable and start TeamSpeak 3 server
+  service:
+    name: teamspeak3-server
+    state: stopped 
+
 
 - block:
     - name: Copy first start script
       copy:
         src: "{{ role_path }}/files/ts3server_first_start.sh"
-        dest: "{{ teamspeak.home }}/teamspeak3-server_linux_amd64-{{ teamspeak.version }}/ts3server_first_start.sh"
+        dest: "{{ ts3server_dir }}/ts3server_first_start.sh"
         mode: "0755"
         owner: "{{ teamspeak.user }}"
         group: "{{ teamspeak.user }}"
@@ -42,8 +47,11 @@
 
     - name: Start ts3server for setting config
       become_user: "{{ teamspeak.user }}"
-      shell: "{{ teamspeak.home }}/teamspeak3-server_linux_amd64-{{ teamspeak.version }}/ts3server_first_start.sh {{ ts3_first_start_args }}"
+      shell: "{{ ts3server_dir }}/ts3server_first_start.sh {{ ts3_first_start_args }}"
       args:
         chdir: "{{ teamspeak.home }}/teamspeak3-server_linux_amd64-{{ teamspeak.version }}"
-      args:
- 
+      register: ts3server_first_start
+    
+    - name: Debug output first start
+      debug: var=ts3server_first_start.stdout_lines
+

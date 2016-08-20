@@ -71,8 +71,6 @@
   tags:
     - teamspeak
 
-- include: config.yml
-  when: teamspeak.ini_file is not none
 
 - name: Create/Update symlink to TeamSpeak {{ teamspeak.version }} server
   file:
@@ -85,6 +83,9 @@
     - Restart TeamSpeak 3 Server
   tags:
     - teamspeak
+
+- include: config.yml
+  when: teamspeak.ini_file is not none
 
 - name: Install TeamSpeak 3 systemctl service file
   template:
