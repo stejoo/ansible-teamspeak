@@ -1,10 +1,18 @@
 ---
 # tasks file for teamspeak
 
+- name: Check if a TeamSpeak 3 systemd service unit exists
+  stat:
+    path: "{{ systemd_service_file_path }}/teamspeak3-server.service"
+  register: ts3_systemd_service
+  tags:
+    - teamspeak
+
 - name: Stop currently running TeamSpeak 3 server instance
   service:
     name: teamspeak3-server
     state: stopped
+  when: ts3_systemd_service.stat.exists
   tags:
     - teamspeak
 
@@ -15,5 +23,15 @@
   delegate_to: "{{ inventory_hostname }}"
   notify:
     - Prune older TeamSpeak 3 server versions
+  tags:
+    - teamspeak
+
+- name: Make sure ownership is set to {{ teamspeak.user }}
+  file:
+    path: "{{ teamspeak.home }}/teamspeak3-server_linux_amd64-{{ teamspeak.version }}/teamspeak3-server_linux_amd64/"
+    state: directory
+    owner: "{{ teamspeak.user }}"
+    group: "{{ teamspeak.user }}"
+    recurse: yes
   tags:
     - teamspeak
