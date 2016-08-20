@@ -6,7 +6,11 @@ Inspired by [dharmab/ansible-playbooks/roles/teamspeak](https://github.com/dharm
 
 TeamSpeak 3 servers installed with this role can also be updated to newer versions with this role.  
 By incrementing the TeamSpeak 3 version number, and assigning the appropriate SHA256 checksum string, this role will copy your currently installed TeamSpeak 3 server and update it to the new version.  
-Note: this feature has been tested, but is still fairly new.
+
+The upgrade mechanism can also be used for restoring TeamSpeak 3 servers from a backup. 
+1. Extract your old Teamspeak 3 server files to a directory called `{teamspeak.home}/oldts/teamspeak3-server_linux_amd64/`. 
+2. Create the `current` symlink in `{teamspeak.home}` to point to `oldts`. For example: `cd /opt/teamspeak && ln -s oldts current`
+3. Now run this Ansible role and the updater mechanism should find it and use it.
 
 Requirements
 ------------
