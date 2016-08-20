@@ -57,6 +57,7 @@
     group: "{{ teamspeak.user }}"
   when: mkdir.changed
 
+
 - name: Create/Update symlink to TeamSpeak {{ teamspeak.version }} server
   file:
     src: "{{ teamspeak.home }}/teamspeak3-server_linux_amd64-{{ teamspeak.version }}"
@@ -66,6 +67,9 @@
     group: "{{ teamspeak.user }}"
   notify:
     - Restart TeamSpeak 3 Server
+
+- include: config.yml
+  when: teamspeak.ini_file is not none
 
 - name: Install TeamSpeak 3 systemctl service file
   template:

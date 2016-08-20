@@ -1,0 +1,67 @@
+---
+# tasks file for teamspeak
+- name: Short facts
+  set_fact:
+    ts3server_dir: "{{ teamspeak.home }}/{{ teamspeak.symlink }}/teamspeak3-server_linux_amd64"
+
+- name: Create ts3server.ini 
+  template:
+    src: ts3server.ini.j2 
+    dest: "{{ ts3server_dir }}/ts3server.ini"
+    mode: 0644
+    owner: "{{ teamspeak.user }}"
+    group: "{{ teamspeak.user }}"
+  register: ts3server_ini
+
+- name: Create mysql ini file if needed
+  template:
+    src: ts3db_mysql.ini.j2 
+    dest: "{{ ts3server_dir }}/ts3db_mysql.ini"
+    mode: 0600
+    owner: "{{ teamspeak.user }}"
+    group: "{{ teamspeak.user }}"
+  when: teamspeak_ini.db_plugin == "ts3db_mysql"
+
+- name: Create teamspeak 3 server logs folder 
+  file: path={{ teamspeak_ini.logpath }} state=directory mode=0755 owner={{ teamspeak.user }} group={{ teamspeak.user }}
+
+
+- block:
+    - name: enable and start teamspeak 3 server
+      service:
+        name: teamspeak3-server
+        state: stopped 
+    - name: Copy first start script
+      copy:
+        src: "{{ role_path }}/files/ts3server_first_start.sh"
+        dest: "{{ ts3server_dir }}/ts3server_first_start.sh"
+        mode: "0755"
+        owner: "{{ teamspeak.user }}"
+        group: "{{ teamspeak.user }}"
+
+    - name: Setting args create_default_virtualserver
+      set_fact: 
+        ts3_first_start_args: "create_default_virtualserver:{{ '1' if teamspeak_ini.voice.create_default else '0' }}"
+    
+    - name: Setting args serveradmin_password
+      set_fact: 
+        ts3_first_start_args: "{{ ts3_first_start_args }} serveradmin_password:{{ teamspeak.serveradmin_password }}"
+      when: teamspeak.serveradmin_password is defined and teamspeak.serveradmin_password is not none 
+
+    - name: Start ts3server for setting config
+      become_user: "{{ teamspeak.user }}"
+      shell: "{{ ts3server_dir }}/ts3server_first_start.sh {{ ts3_first_start_args }} > {{ teamspeak_ini.logpath }}/first_start.log"
+      args:
+        chdir: "{{ teamspeak.home }}/teamspeak3-server_linux_amd64-{{ teamspeak.version }}"
+        creates: "{{ teamspeak_ini.logpath }}/first_start.log" 
+        
+    - name: Grepping token from first start log 
+      shell: "grep -B 1 'token=' {{ teamspeak_ini.logpath }}/first_start.log | sed -r 's .{55}  '"
+      args:
+        chdir: "{{ teamspeak.home }}/teamspeak3-server_linux_amd64-{{ teamspeak.version }}"
+      register: ts3server_first_start
+
+    - name: Debug output first start
+      debug: var=ts3server_first_start.stdout_lines
+
+  when: ts3server_ini.changed

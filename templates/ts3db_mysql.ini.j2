@@ -1,0 +1,19 @@
+machine_id=
+
+default_voice_port={{teamspeak_ini.voice.port}}
+voice_ip={{teamspeak_ini.voice.ip}}
+
+query_port={{teamspeak_ini.query.port}}
+query_ip={{teamspeak_ini.query.ip}}
+
+filetransfer_port={{teamspeak_ini.filetransfer.port}}
+filetransfer_ip={{teamspeak_ini.filetransfer.ip}}
+
+dbplugin={{ teamspeak_ini.db_plugin }}
+dbpluginparameter={{ 'ts3db_mysql.ini' if teamspeak_ini.db_plugin == 'ts3db_mysql' else ''  }}
+dbsqlpath=sql/
+dbsqlcreatepath={{ 'create_mysql/' if teamspeak_ini.db_plugin == 'ts3db_mysql' else 'create_sqlite/'  }}
+logpath={{ teamspeak_ini.logpath }}
+logquerycommands={{ teamspeak_ini.logquerycommands }}
+
+
