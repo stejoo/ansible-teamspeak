@@ -21,4 +21,29 @@
   when: teamspeak_ini.db_plugin == "ts3db_mysql"
   tags:
     - teamspeak
-   
+
+- block:
+    - name: Copy first start script
+      copy:
+        src: "{{ role_path }}/files/ts3server_first_start.sh"
+        dest: "{{ teamspeak.home }}/teamspeak3-server_linux_amd64-{{ teamspeak.version }}/ts3server_first_start.sh"
+        mode: "0755"
+        owner: "{{ teamspeak.user }}"
+        group: "{{ teamspeak.user }}"
+
+    - name: Setting args create_default_virtualserver
+      set_fact: 
+        ts3_first_start_args: "create_default_virtualserver:{{ '1' if teamspeak_ini.voice.create_default else '0' }}"
+    
+    - name: Setting args serveradmin_password
+      set_fact: 
+        ts3_first_start_args: "{{ ts3_first_start_args }} serveradmin_password:{{ teamspeak.serveradmin_password }}"
+      when: teamspeak.serveradmin_password is defined and teamspeak.serveradmin_password is not none 
+
+    - name: Start ts3server for setting config
+      become_user: "{{ teamspeak.user }}"
+      shell: "{{ teamspeak.home }}/teamspeak3-server_linux_amd64-{{ teamspeak.version }}/ts3server_first_start.sh {{ ts3_first_start_args }}"
+      args:
+        chdir: "{{ teamspeak.home }}/teamspeak3-server_linux_amd64-{{ teamspeak.version }}"
+      args:
+ 
