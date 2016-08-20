@@ -5,16 +5,12 @@
   stat:
     path: "{{ systemd_service_file_path }}/teamspeak3-server.service"
   register: ts3_systemd_service
-  tags:
-    - teamspeak
 
 - name: Stop currently running TeamSpeak 3 server instance
   service:
     name: teamspeak3-server
     state: stopped
   when: ts3_systemd_service.stat.exists
-  tags:
-    - teamspeak
 
 - name: Copy existing TeamSpeak 3 server data to new TeamSpeak {{ teamspeak.version }} server directory
   synchronize:
@@ -23,8 +19,6 @@
   delegate_to: "{{ inventory_hostname }}"
   notify:
     - Prune older TeamSpeak 3 server versions
-  tags:
-    - teamspeak
 
 - name: Make sure ownership is set to {{ teamspeak.user }}
   file:
@@ -33,5 +27,3 @@
     owner: "{{ teamspeak.user }}"
     group: "{{ teamspeak.user }}"
     recurse: yes
-  tags:
-    - teamspeak

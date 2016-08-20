@@ -48,7 +48,7 @@ Including an example of how to use your role (for instance, with variables passe
 
     - hosts: ts3servers
       roles:
-         - teamspeak
+         - { role: teamspeak, tags: teamspeak }
 
 License
 -------
