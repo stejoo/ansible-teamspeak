@@ -7,8 +7,11 @@ Type=simple
 User={{ teamspeak.user }}
 Group={{ teamspeak.user }}
 WorkingDirectory={{ teamspeak.home }}/{{ teamspeak.symlink }}/teamspeak3-server_linux_amd64
-Environment='LD_LIBRARY_PATH="{{ teamspeak.home }}/{{ teamspeak.symlink }}/teamspeak3-server_linux_amd64/:$LD_LIBRARY_PATH"'
+{% if teamspeak.ini_file is not none %}
+ExecStart={{ teamspeak.home }}/{{ teamspeak.symlink }}/teamspeak3-server_linux_amd64/ts3server_minimal_runscript.sh inifile={{ teamspeak.ini_file }}
+{% else %}
 ExecStart={{ teamspeak.home }}/{{ teamspeak.symlink }}/teamspeak3-server_linux_amd64/ts3server_minimal_runscript.sh
+{% endif %}
 
 [Install]
 WantedBy=multi-user.target

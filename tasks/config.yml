@@ -1,0 +1,16 @@
+---
+# Config files and actions for teamspeak3 server
+- name: Short facts
+  set_fact:
+    ts3server_dir: "{{ teamspeak.home }}/{{ teamspeak.symlink }}/teamspeak3-server_linux_amd64"
+
+- name: Create ts3server.ini 
+  template:
+    src: ts3server.ini.j2 
+    dest: "{{ ts3server_dir }}/ts3server.ini"
+    mode: 0644
+    owner: "{{ teamspeak.user }}"
+    group: "{{ teamspeak.user }}"
+  register: ts3server_ini
+
+
