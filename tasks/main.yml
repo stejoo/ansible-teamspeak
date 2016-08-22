@@ -68,7 +68,7 @@
     - Restart TeamSpeak 3 Server
 
 - include: config.yml
-  when: teamspeak_ini is defined
+  when: teamspeak_ini is defined or teamspeak.ini_file is none 
 
 - name: Install TeamSpeak 3 systemctl service file
   template:
