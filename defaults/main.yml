@@ -21,9 +21,9 @@ teamspeak_ini:
   filetransfer:
     ip: 0.0.0.0
     port: 10011 
-    query:
-      ip: 0.0.0.0
-      port: 33003
+  query:
+    ip: 0.0.0.0
+    port: 33003
   db_plugin: ts3db_sqlite3
   logpath: /var/log/teamspeak3-server
   logquerycommands: false

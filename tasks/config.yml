@@ -13,4 +13,11 @@
     group: "{{ teamspeak.user }}"
   register: ts3server_ini
 
+- name: Create teamspeak 3 server logs folder 
+  file: 
+    path: "{{ teamspeak_ini.logpath }}"
+    state: directory
+    mode: 0755
+    owner: "{{ teamspeak.user }}"
+    group: "{{ teamspeak.user }}"
 
