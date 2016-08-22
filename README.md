@@ -32,6 +32,22 @@ Role Variables
 * <tt>teamspeak.checksum</tt>: SHA256 checksum of archive of TeamSpeak 3 server version for verification purposes. Example: "sha256:6bb0e8c8974fa5739b90e1806687128342b3ab36510944f576942e67df7a1bd9"
 * <tt>teamspeak.keep</tt>: Amount of TeamSpeak 3 server versions to keep installed, includes current version. A setting of "2" keeps the current and one previous version installed.
 
+* <tt>teamspeak_ini.machine_id</tt>: Teamspeak server machine ID, used for multiple instances on the save database.
+* <tt>teamspeak.voice</tt>: Properties of the voice server
+* <tt>teamspeak.voice.ip</tt>: Voice server bind IP
+* <tt>teamspeak.voice.create_default</tt>: Let teamspeak3 server on first start create default server (TODO #7)
+* <tt>teamspeak.voice.default_port</tt>: Default voice server port (TODO #7)
+* <tt>teamspeak.filetransfer</tt>: Properties of the file transfer server
+* <tt>teamspeak.filetransfer.ip</tt>: File transfer server bind IP
+* <tt>teamspeak.filetransfer.port</tt>: File transfer server listen port
+* <tt>teamspeak.query</tt>: Properties of the server query
+* <tt>teamspeak.query.ip</tt>: Server query bind IP
+* <tt>teamspeak.query.port</tt>: Server query listen port
+* <tt>teamspeak.db_plugin</tt>: Teamspeak database system (TODO #4) 
+* <tt>teamspeak.logpath</tt>: Teamspeak logpath. Must be absolute 
+* <tt>teamspeak.logquerycommand</tt>: Teamspeak log all query command
+
+
 <tt>vars/{debian,redhat}.yml</tt>:
 
 * <tt>systemd_service_file_path</tt>: Path where Systemd service files are installed.
