@@ -19,6 +19,13 @@
 - include: config.yml
   when: teamspeak_ini_enabled
 
+# Clean-up a lingering configuration file if we don't need it anymore
+- name: Clean-up configuration 
+  file:
+    path: "{{ teamspeak.home }}/{{ teamspeak.symlink }}/teamspeak3-server_linux_amd64/{{ teamspeak_ini_filename }}"
+    state: absent
+  when: not teamspeak_ini_enabled
+
 # Perform the running of handlers now
 # So we can do "Reload systemd" (and possibly queued clean-up) 
 # before we start using the new/changed .service file.

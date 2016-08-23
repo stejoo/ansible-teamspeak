@@ -66,4 +66,5 @@
     group: root
   notify:
     - Reload systemd
+    - Restart TeamSpeak 3 Server
 
