@@ -21,37 +21,42 @@ Tested on Ubuntu 16.04.1.
 Role Variables
 --------------
 
-<tt>defaults/main.yml</tt>:
+Available variables to set for the TeamSpeak 3 Server installation:
 
-* <tt>teamspeak.user</tt>: User to run the teamspeak server. Defaults to "teamspeak".
-* <tt>teamspeak.comment</tt>: User comment field. Defaults to "Teamspeak 3 user".
-* <tt>teamspeak.home</tt>: Home directory for the teamspeak user. Will also be used to install the teamspeak server in. Defaults to "/opt/teamspeak".
-* <tt>teamspeak.shell</tt>: Shell for the teamspeak user. Defaults to "/usr/sbin/nologin".
-* <tt>teamspeak.symlink</tt>: Name of symlink to point to current TeamSpeak 3 server directory. Defaults to "current".
-* <tt>teamspeak.version</tt>: Version of Teamspeak 3 Server to install. Defaults to "3.0.12.4".
-* <tt>teamspeak.checksum</tt>: SHA256 checksum of archive of TeamSpeak 3 server version for verification purposes. Example: "sha256:6bb0e8c8974fa5739b90e1806687128342b3ab36510944f576942e67df7a1bd9"
-* <tt>teamspeak.keep</tt>: Amount of TeamSpeak 3 server versions to keep installed, includes current version. A setting of "2" keeps the current and one previous version installed.
-* <tt>teamspeak.ini_file</tt>: Set the teamspeak ini file. If not set it will not generate. 
+* `teamspeak.user`: User to run the teamspeak server. Defaults to "teamspeak".
+* `teamspeak.comment`: User comment field. Defaults to "Teamspeak 3 user".
+* `teamspeak.home`: Home directory for the teamspeak user. Will also be used to install the teamspeak server in. Defaults to "/opt/teamspeak".
+* `teamspeak.shell`: Shell for the teamspeak user. Defaults to "/usr/sbin/nologin".
+* `teamspeak.symlink`: Name of symlink to point to current TeamSpeak 3 server directory. Defaults to "current".
+* `teamspeak.version`: Version of Teamspeak 3 Server to install. Defaults to "3.0.12.4".
+* `teamspeak.checksum`: SHA256 checksum of archive of TeamSpeak 3 server version for verification purposes. Example: "sha256:6bb0e8c8974fa5739b90e1806687128342b3ab36510944f576942e67df7a1bd9"
+* `teamspeak.keep`: Amount of TeamSpeak 3 server versions to keep installed, includes current version. A setting of "2" keeps the current and one previous version installed, which is the default.
 
-* <tt>teamspeak_ini.machine_id</tt>: Teamspeak server machine ID, used for multiple instances on the save database.
-* <tt>teamspeak.voice</tt>: Properties of the voice server
-* <tt>teamspeak.voice.ip</tt>: Voice server bind IP
-* <tt>teamspeak.voice.create_default</tt>: Let teamspeak3 server on first start create default server (TODO #7)
-* <tt>teamspeak.voice.default_port</tt>: Default voice server port (TODO #7)
-* <tt>teamspeak.filetransfer</tt>: Properties of the file transfer server
-* <tt>teamspeak.filetransfer.ip</tt>: File transfer server bind IP
-* <tt>teamspeak.filetransfer.port</tt>: File transfer server listen port
-* <tt>teamspeak.query</tt>: Properties of the server query
-* <tt>teamspeak.query.ip</tt>: Server query bind IP
-* <tt>teamspeak.query.port</tt>: Server query listen port
-* <tt>teamspeak.db_plugin</tt>: Teamspeak database system (TODO #4) 
-* <tt>teamspeak.logpath</tt>: Teamspeak logpath. Must be absolute 
-* <tt>teamspeak.logquerycommand</tt>: Teamspeak log all query command
+If you need further configuration a INI file can be created for you. In such a case you should override the `teamspeak_ini_enabled` to `yes`. For example by defining it that way in host or group vars in your playbook.
 
+* `teamspeak_ini_enabled`: Set to `yes` if you want use the configuration options listed below. It will create INI-style configuration file for the TeamSpeak 3 Server to use. Defaults to `no`.
+* `teamspeak_ini_filename`: Name of the INI-style configuration file. Defaults to `ts3server.ini`.
 
-<tt>vars/{debian,redhat}.yml</tt>:
+The following configuration blocks can be used to configure the TeamSpeak 3 Server as you please. Make sure to override the complete blocks in full as they contain nested properties. Most reliable way is to copy a block from the `defaults/main.yml` into your own definitions file and edit accordingly.
 
-* <tt>systemd_service_file_path</tt>: Path where Systemd service files are installed.
+* `teamspeak_network.voice`: Contains nested properties of the voice server. 
+* `teamspeak_network.voice.default_port`: UDP port for voice clients to connect to. Default at UDP port 9987.
+* `teamspeak_network.voice.ip`: IP address to listen on for incoming voice connections. Default at 0.0.0.0, which binds any IP address.
+* `teamspeak_network.filetransfer`: Contains nested properties of the file transfer server.
+* `teamspeak_network.filetransfer.port`: TCP port to use for file transfers. Default at TCP port 30033.
+* `teamspeak_network.filetransfer.ip`: IP address where file transfers are bound to. Default to 0.0.0.0, which binds any IP address.
+* `teamspeak_network.query`: Contains nested properties for the ServerQueries part of the server.
+* `teamspeak_network.query.port`: TCP port used for ServerQuery connections. Default at TCP port 10011.
+* `teamspeak_network.query.ip`: IP address where to listen for inbound ServerQuery connections. Default at 0.0.0.0, which binds any IP address.
+
+Other TeamSpeak 3 Server options:
+
+* `teamspeak_ini_machine_id`: Teamspeak server machine ID. Used for running provide multiple instances on the same database with a unique ID. Default is empty.
+* `teamspeak_create_default_virtualserver`: Defaults to `yes`. Normally one virtual server is created automatically when the TeamSpeak 3 Server process is started. If you set this to `no` a virtual server will not be started upon startup and you would have to start one manually using the ServerQuery interface. 
+
+Variables that differ across different Linux distributions have been set in `vars/{debian,redhat}.yml`:
+
+* `systemd_service_file_path`: Path where Systemd service files are installed.
 
 Dependencies
 ------------

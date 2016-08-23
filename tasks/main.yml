@@ -12,79 +12,19 @@
       paths: 
         - ../vars
 
-- name: Create Teamspeak user
-  user:
-    name: "{{ teamspeak.user }}"
-    comment: "{{ teamspeak.comment }}"
-    home: "{{ teamspeak.home }}"
-    shell: "{{ teamspeak.shell }}"
-    system: yes
+# Installation of TeamSpeak 3 Server 
+- include: install.yml
 
-- name: Download TeamSpeak {{ teamspeak.version }} server files
-  get_url:
-    url: "http://dl.4players.de/ts/releases/{{ teamspeak.version }}/teamspeak3-server_linux_amd64-{{ teamspeak.version }}.tar.bz2"
-    dest: "{{ teamspeak.home }}/teamspeak3-server_linux_amd64-{{ teamspeak.version }}.tar.bz2"
-    checksum: "{{ teamspeak.checksum }}"
-    owner: "{{ teamspeak.user }}"
-    group: "{{ teamspeak.user }}"
-
-- name: Create TeamSpeak {{ teamspeak.version }} server directory
-  file:
-    path: "{{ teamspeak.home}}/teamspeak3-server_linux_amd64-{{ teamspeak.version }}"
-    state: directory
-    owner: "{{ teamspeak.user }}"
-    group: "{{ teamspeak.user }}"
-  register: mkdir
-
-# If a new directory has been created, check for (current) user data.
-- name: Checking for a currently installed TeamSpeak 3 server with user data
-  stat:
-    path: "{{ teamspeak.home }}/{{ teamspeak.symlink }}/teamspeak3-server_linux_amd64/files"
-  register: userdata
-  when: mkdir.changed
-
-# If user data has been found, this is an upgrade situation.
-- include: ts3update.yml
-  when: userdata.stat.exists is defined and userdata.stat.exists == True
-
-# Created a new directory? Extract the files into it. Overwrites existing.
-- name: Extract TeamSpeak {{ teamspeak.version }} server files
-  unarchive:
-    copy: no
-    src: "{{ teamspeak.home }}/teamspeak3-server_linux_amd64-{{ teamspeak.version }}.tar.bz2"
-    dest: "{{ teamspeak.home }}/teamspeak3-server_linux_amd64-{{ teamspeak.version }}/"
-    owner: "{{ teamspeak.user }}"
-    group: "{{ teamspeak.user }}"
-  when: mkdir.changed
-
-- name: Create/Update symlink to TeamSpeak {{ teamspeak.version }} server
-  file:
-    src: "{{ teamspeak.home }}/teamspeak3-server_linux_amd64-{{ teamspeak.version }}"
-    dest: "{{ teamspeak.home }}/{{ teamspeak.symlink }}"
-    state: link
-    owner: "{{ teamspeak.user }}"
-    group: "{{ teamspeak.user }}"
-  notify:
-    - Restart TeamSpeak 3 Server
-
+# Configuration of TeamSpeak 3 Server (if requested)
 - include: config.yml
-  when: teamspeak_ini is defined or teamspeak.ini_file is none and teamspeak_ini.disable is false 
+  when: teamspeak_ini_enabled
 
-- name: Install TeamSpeak 3 systemctl service file
-  template:
-    src: teamspeak3-server.service.j2
-    dest: "{{ systemd_service_file_path }}/teamspeak3-server.service"
-    mode: 0644
-    owner: root
-    group: root
-  notify:
-    - Reload systemd
-
-# Perform the "Reload systemd" (and possibly queued clean-up) handler now.
-# Before we start using the new/changed .service file.
+# Perform the running of handlers now
+# So we can do "Reload systemd" (and possibly queued clean-up) 
+# before we start using the new/changed .service file.
 - meta: flush_handlers
-
-- name: Enable and start TeamSpeak 3 server
+# Make sure TeamSpeak 3 Server is started and enabled
+- name: Enable and start TeamSpeak 3 Server
   service:
     name: teamspeak3-server
     state: started
