@@ -67,6 +67,9 @@
   notify:
     - Restart TeamSpeak 3 Server
 
+- include: config.yml
+  when: teamspeak_ini is defined or teamspeak.ini_file is none and teamspeak_ini.disable is false 
+
 - name: Install TeamSpeak 3 systemctl service file
   template:
     src: teamspeak3-server.service.j2
