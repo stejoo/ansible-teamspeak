@@ -31,6 +31,7 @@ Role Variables
 * <tt>teamspeak.version</tt>: Version of Teamspeak 3 Server to install. Defaults to "3.0.12.4".
 * <tt>teamspeak.checksum</tt>: SHA256 checksum of archive of TeamSpeak 3 server version for verification purposes. Example: "sha256:6bb0e8c8974fa5739b90e1806687128342b3ab36510944f576942e67df7a1bd9"
 * <tt>teamspeak.keep</tt>: Amount of TeamSpeak 3 server versions to keep installed, includes current version. A setting of "2" keeps the current and one previous version installed.
+* <tt>teamspeak.ini_file</tt>: Set the teamspeak ini file. If not set it will not generate. 
 
 * <tt>teamspeak_ini.machine_id</tt>: Teamspeak server machine ID, used for multiple instances on the save database.
 * <tt>teamspeak.voice</tt>: Properties of the voice server

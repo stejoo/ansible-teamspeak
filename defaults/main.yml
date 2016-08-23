@@ -13,6 +13,7 @@ teamspeak:
   ini_file: ts3server.ini
 
 teamspeak_ini:
+  disabled: true
   machine_id: ""
   voice:
     ip: 0.0.0.0
