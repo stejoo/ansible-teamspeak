@@ -2,7 +2,7 @@
 # install tasks file for teamspeak
 
 # Start of installation
-- name: Create Teamspeak user
+- name: "Install : Create Teamspeak user"
   user:
     name: "{{ teamspeak.user }}"
     comment: "{{ teamspeak.comment }}"
@@ -10,7 +10,7 @@
     shell: "{{ teamspeak.shell }}"
     system: yes
 
-- name: Download TeamSpeak {{ teamspeak.version }} Server files
+- name: "Install : Download TeamSpeak {{ teamspeak.version }} Server files"
   get_url:
     url: "http://dl.4players.de/ts/releases/{{ teamspeak.version }}/teamspeak3-server_linux_amd64-{{ teamspeak.version }}.tar.bz2"
     dest: "{{ teamspeak.home }}/teamspeak3-server_linux_amd64-{{ teamspeak.version }}.tar.bz2"
@@ -18,7 +18,7 @@
     owner: "{{ teamspeak.user }}"
     group: "{{ teamspeak.user }}"
 
-- name: Create TeamSpeak {{ teamspeak.version }} Server directory
+- name: "Install : Create TeamSpeak {{ teamspeak.version }} Server directory"
   file:
     path: "{{ teamspeak.home }}/teamspeak3-server_linux_amd64-{{ teamspeak.version }}"
     state: directory
@@ -27,7 +27,7 @@
   register: mkdir
 
 # If a new directory has been created, check for (current) user data.
-- name: Checking for a currently installed TeamSpeak 3 Server with user data
+- name: "Install : Checking for a currently installed TeamSpeak 3 Server with user data"
   stat:
     path: "{{ teamspeak.home }}/{{ teamspeak.symlink }}/teamspeak3-server_linux_amd64/files"
   register: userdata
@@ -38,7 +38,7 @@
   when: userdata.stat.exists is defined and userdata.stat.exists == True
 
 # Created a new directory? Extract the files into it. Overwrites existing.
-- name: Extract TeamSpeak {{ teamspeak.version }} Server files
+- name: "Install : Extract TeamSpeak {{ teamspeak.version }} Server files"
   unarchive:
     copy: no
     src: "{{ teamspeak.home }}/teamspeak3-server_linux_amd64-{{ teamspeak.version }}.tar.bz2"
@@ -47,7 +47,7 @@
     group: "{{ teamspeak.user }}"
   when: mkdir.changed
 
-- name: Create/Update symlink to TeamSpeak {{ teamspeak.version }} Server
+- name: "Install : Create/Update symlink to TeamSpeak {{ teamspeak.version }} Server"
   file:
     src: "{{ teamspeak.home }}/teamspeak3-server_linux_amd64-{{ teamspeak.version }}"
     dest: "{{ teamspeak.home }}/{{ teamspeak.symlink }}"
@@ -57,7 +57,7 @@
   notify:
     - Restart TeamSpeak 3 Server
 
-- name: Install TeamSpeak 3 systemctl service file
+- name: "Install : Install TeamSpeak 3 systemctl service file"
   template:
     src: teamspeak3-server.service.j2
     dest: "{{ systemd_service_file_path }}/teamspeak3-server.service"
