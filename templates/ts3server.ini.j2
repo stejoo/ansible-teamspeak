@@ -1,7 +1,3 @@
-{% if teamspeak_machine_id is not none %}
-machine_id={{ teamspeak_machine_id }}
-{% endif %}
-
 default_voice_port={{ teamspeak_network.voice.default_port }}
 voice_ip={{ teamspeak_network.voice.ip }}
 filetransfer_port={{ teamspeak_network.filetransfer.port }}
@@ -12,4 +8,9 @@ query_ip={{ teamspeak_network.query.ip }}
 {% if teamspeak_create_default_virtualserver %}
 create_default_virtualserver=1
 {% endif %}
-
+{% if teamspeak_use_license and teamspeak_licensepath is not none %}
+licensepath={{ teamspeak_licensepath }}/
+{% endif %}
+{% if teamspeak_machine_id is not none %}
+machine_id={{ teamspeak_machine_id }}
+{% endif %}

@@ -1,0 +1,18 @@
+---
+# License install tasks for role teamspeak
+
+- name: "License : Create directory for license"
+  file:
+    path: "{{ teamspeak_licensepath }}"
+    state: directory
+  when: teamspeak_licensepath is not none
+
+- name: "License : Copy the license file"
+  copy:
+    src: "{{ teamspeak_license_srcfile }}"
+    dest: "{{ teamspeak_licensepath if teamspeak_licensepath is not none else ts3server_dir }}/licensekey.dat"
+    owner: "{{ teamspeak.user }}"
+    group: "{{ teamspeak.user }}"
+    mode: 0400
+  notify:
+    - Restart TeamSpeak 3 Server
