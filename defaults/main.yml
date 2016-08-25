@@ -14,6 +14,9 @@ teamspeak:
 teamspeak_ini_enabled: no
 teamspeak_ini_filename: ts3server.ini
 
+teamspeak_use_license: no
+teamspeak_licensepath: 
+
 teamspeak_network:
   voice:
     default_port: 9987
@@ -25,5 +28,5 @@ teamspeak_network:
     port: 10011
     ip: 0.0.0.0
 
-teamspeak_machine_id:
 teamspeak_create_default_virtualserver: yes
+teamspeak_machine_id:

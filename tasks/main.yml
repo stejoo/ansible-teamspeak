@@ -15,16 +15,38 @@
 # Installation of TeamSpeak 3 Server 
 - include: install.yml
 
+# Store the TeamSpeak 3 Server directory in a short variable
+- name: "Set TeamSpeak 3 Server directory fact"
+  set_fact:
+    ts3server_dir: "{{ teamspeak.home }}/{{ teamspeak.symlink }}/teamspeak3-server_linux_amd64"
+
+# License file management
+  # Install a license file 
+- include: install_license.yml
+  when: teamspeak_use_license
+
+  # Remove a possible leftover license file when teamspeak_use_license is disabled.
+  # The default is to look for it in the TeamSpeak 3 Server directory, so
+  # we remove it there if the option has been disabled.
+- name: "License : Clean up license in TeamSpeak 3 Server directory if needed"
+  file:
+    path: "{{ ts3server_dir }}/licensekey.dat"
+    state: absent
+  when: not teamspeak_use_license
+# End of license file management
+
 # Configuration of TeamSpeak 3 Server (if requested)
+  # Create configuration file
 - include: config.yml
   when: teamspeak_ini_enabled
 
-# Clean-up a lingering configuration file if we don't need it anymore
-- name: Clean-up configuration 
+  # Clean-up a lingering configuration file if we don't need it anymore
+- name: "Configuration : Clean-up old configuration file if needed"
   file:
     path: "{{ teamspeak.home }}/{{ teamspeak.symlink }}/teamspeak3-server_linux_amd64/{{ teamspeak_ini_filename }}"
     state: absent
   when: not teamspeak_ini_enabled
+# End of configuration
 
 # Perform the running of handlers now
 # So we can do "Reload systemd" (and possibly queued clean-up) 
