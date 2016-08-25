@@ -15,6 +15,7 @@ teamspeak_ini_enabled: no
 teamspeak_ini_filename: ts3server.ini
 
 teamspeak_use_license: no
+teamspeak_license_srcfile: files/licensekey.dat
 teamspeak_licensepath: 
 
 teamspeak_network:

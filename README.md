@@ -46,6 +46,7 @@ To configure TeamSpeak 3 Server a INI-style configuration file is used. If you r
 If you have a TeamSpeak 3 Server license, you can have this role install it for you. Place your license file called `licensekey.dat` in the `files/` directory of this role. Tip: if you use Git, add that path to your `.gitignore` to make sure you do not push it somewhere by accident. 
 
 * `teamspeak_use_license`: Set to `yes` to have your license set up. Default is `no`.
+* `teamspeak_license_srcfile`: TeamSpeak 3 Server license file on Ansible host to copy to target. Default searches for the license file at `files/licensekey.dat`
 * `teamspeak_licensepath`: Used to specify a directory where your license should be located on the target host. If a non-existent directory is specified it will be created for you. Make sure you enable the use of a INI configuration file, otherwise this option will be ineffective. The default is to leave this variable empty, which will place the license file in the same directory as the TeamSpeak 3 Server is installed in.  
 
 #### Network configuration

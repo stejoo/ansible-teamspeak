@@ -9,7 +9,7 @@
 
 - name: "License : Copy the license file"
   copy:
-    src: licensekey.dat
+    src: "{{ teamspeak_license_srcfile }}"
     dest: "{{ teamspeak_licensepath if teamspeak_licensepath is not none else ts3server_dir }}/licensekey.dat"
     owner: "{{ teamspeak.user }}"
     group: "{{ teamspeak.user }}"
