@@ -31,8 +31,8 @@ These variables define properties for the user thats going to run the TeamSpeak 
 * `teamspeak.home`: Home directory for the teamspeak user. Will also be used to install the teamspeak server in. Defaults to "/opt/teamspeak".
 * `teamspeak.shell`: Shell for the teamspeak user. Defaults to "/usr/sbin/nologin".
 * `teamspeak.symlink`: Name of symlink to point to current TeamSpeak 3 server directory. Defaults to "current".
-* `teamspeak.version`: Version of Teamspeak 3 Server to install. Defaults to "3.0.12.4".
-* `teamspeak.checksum`: SHA256 checksum of archive of TeamSpeak 3 server version for verification purposes. Example: "sha256:6bb0e8c8974fa5739b90e1806687128342b3ab36510944f576942e67df7a1bd9"
+* `teamspeak.version`: Version of Teamspeak 3 Server to install. Defaults to "3.0.13.3".
+* `teamspeak.checksum`: SHA256 checksum of archive of TeamSpeak 3 server version for verification purposes. Example: "sha256:e9f48c8a9bad75165e3a7c9d9f6b18639fd8aba63adaaa40aebd8114166273ae"
 * `teamspeak.keep`: Amount of TeamSpeak 3 server versions to keep installed, includes the currently installed version. A setting of "3" keeps the current and two previous version installed, which is the default. In case an upgrade goes wrong, you simply rewind the `teamspeak.version` and `teamspeak.checksum` to the older version and run the role again to downgrade back to a known good.
 
 ### Further configuraton
