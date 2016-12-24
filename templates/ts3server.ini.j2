@@ -5,9 +5,8 @@ filetransfer_ip={{ teamspeak_network.filetransfer.ip }}
 query_port={{ teamspeak_network.query.port }}
 query_ip={{ teamspeak_network.query.ip }}
 
-{% if teamspeak_create_default_virtualserver %}
-create_default_virtualserver=1
-{% endif %}
+create_default_virtualserver={% 1 if teamspeak_create_default_virtualserver else 0 %}
+
 {% if teamspeak_use_license and teamspeak_licensepath is not none %}
 licensepath={{ teamspeak_licensepath }}/
 {% endif %}
