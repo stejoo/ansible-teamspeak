@@ -11,9 +11,18 @@
   notify:
     - Restart TeamSpeak 3 Server
 
-- name: "grep ServerAdmin Password"
+- name: "Configuration : Fetch ServerAdmin Password"
   shell: 'journalctl -u teamspeak3-server.service --since today | grep -oEi \'password= "(.*)"\' | cut -d\" -f2 | tail -n1'
   register: __ts3_serveradmin_password
-- name: "Fetch default server Privilege token"
-  shell: 'journalctl -u teamspeak3-server.service --since today | grep -oEi 'token=(.*)' | cut -d= -f2 | tail -n1'
-  register: __ts3_serveradmin_password
+
+- debug: 
+    msg: "ServerAdmin Password: {{ __ts3_serveradmin_password.stdout }}"
+
+- block:
+  - name: "Configuration : Fetch default server privilege token"
+    shell: 'journalctl -u teamspeak3-server.service --since today | grep -oEi \'token=(.*)\' | cut -d= -f2 | tail -n1'
+    register: __ts3_default_priv_token
+  - debug: 
+      msg: "Default virtualserver privilege token: {{ __ts3_default_priv_token.stdout }}"
+- when: teamspeak_create_default_virtualserver
+
