@@ -14,3 +14,6 @@
 - name: "grep ServerAdmin Password"
   shell: 'journalctl -u teamspeak3-server.service --since today | grep -oEi \'password= "(.*)"\' | cut -d\" -f2 | tail -n1'
   register: __ts3_serveradmin_password
+- name: "Fetch default server Privilege token"
+  shell: 'journalctl -u teamspeak3-server.service --since today | grep -oEi 'token=(.*)' | cut -d= -f2 | tail -n1'
+  register: __ts3_serveradmin_password
