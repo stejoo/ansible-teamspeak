@@ -12,13 +12,20 @@
     state: stopped
   when: ts3_systemd_service.stat.exists
 
-- name: "Update : Copy existing TeamSpeak 3 Server data to new TeamSpeak {{ teamspeak.version }} Server directory"
+- name: "Update : Copy existing TeamSpeak 3 Server `files` to new TeamSpeak {{ teamspeak.version }} Server directory"
   synchronize:
-    src: "{{ teamspeak.home }}/{{ teamspeak.symlink }}/teamspeak3-server_linux_amd64/"
-    dest: "{{ teamspeak.home }}/teamspeak3-server_linux_amd64-{{ teamspeak.version }}/teamspeak3-server_linux_amd64/"
+    src: "{{ teamspeak.home }}/{{ teamspeak.symlink }}/teamspeak3-server_linux_amd64/files/"
+    dest: "{{ teamspeak.home }}/teamspeak3-server_linux_amd64-{{ teamspeak.version }}/teamspeak3-server_linux_amd64/files/"
   delegate_to: "{{ inventory_hostname }}"
   notify:
     - Prune older TeamSpeak 3 Server versions
+
+- name: "Update : Copy existing TeamSpeak 3 Server `sqlite` file to new TeamSpeak {{ teamspeak.version }} Server directory"
+  synchronize:
+    src: "{{ teamspeak.home }}/{{ teamspeak.symlink }}/teamspeak3-server_linux_amd64/files/ts3server.sqlitedb"
+    dest: "{{ teamspeak.home }}/teamspeak3-server_linux_amd64-{{ teamspeak.version }}/teamspeak3-server_linux_amd64/files/ts3server.sqlitedb"
+  delegate_to: "{{ inventory_hostname }}"
+  when: "teamspeak_db_plugin == 'sqlite3'"
 
 - name: "Update : Make sure ownership is set to {{ teamspeak.user }}"
   file:
