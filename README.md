@@ -95,3 +95,4 @@ MIT
 ## Author Information
 
 Stefan Joosten <stefan@sjoosten.nl>
+Egbert Verhage <egbert@eggiecode.org>
