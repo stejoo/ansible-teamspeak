@@ -10,3 +10,15 @@
     group: "{{ teamspeak.user }}"
   notify:
     - Restart TeamSpeak 3 Server
+
+- block:
+  - name: "Configuration : Template file for MariaDB Config"
+    template: 
+      src: ts3db.ini.j2 
+      dest: "{{ ts3server_dir }}/{{ teamspeak_db_ini_filename }}"
+      mode: 0640
+      owner: "{{ teamspeak.user }}"
+      group: "{{ teamspeak.user }}"
+    notify:
+      - Restart TeamSpeak 3 Server
+  when: "teamspeak_db_plugin == 'mariadb'"
