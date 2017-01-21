@@ -14,6 +14,16 @@ teamspeak:
 teamspeak_ini_enabled: no
 teamspeak_ini_filename: ts3server.ini
 
+teamspeak_db_plugin: sqlite3
+teamspeak_db_ini_filename: "ts3db.ini"
+teamspeak_db_ini_config: 
+  host: "127.0.0.1"
+  port: 3306
+  socket: ""
+  database: "ts3"
+  username: "DB_USERNAME"
+  password: "PASSWORD!@#"
+
 teamspeak_use_license: no
 teamspeak_license_srcfile: files/licensekey.dat
 teamspeak_licensepath: 
