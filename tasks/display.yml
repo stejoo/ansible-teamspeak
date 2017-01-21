@@ -20,7 +20,7 @@
 
 - block:
   - name: "Display : Fetch the ServerAdmin privilege key (token)"
-    shell: journalctl --unit teamspeak3-server.service --reverse | awk -F'=' '/token=/ { print $2 ; exit}'
+    shell: journalctl --unit teamspeak3-server.service --reverse | awk -F'=' '/token=/ { print $2 ; exit }'
     register: __ts3_default_priv_token
     changed_when: False
   - name: "Display : Show the ServerAdmin privilege key"
