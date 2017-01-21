@@ -65,6 +65,23 @@ Description of the `teamspeak_network` configuration block and it's options:
 * `teamspeak_network.query.port`: TCP port used for ServerQuery connections. Default at TCP port 10011.
 * `teamspeak_network.query.ip`: IP address where to listen for inbound ServerQuery connections. Default at 0.0.0.0, which binds any IP address.
 
+#### Database configuration
+
+The database configuration block is for setting the database. Supported: sqlite (default), mariadb. MySQL support has been deprecated from server version 3.0.11.
+MariaDB connection only works with a vaild teamspeak license.
+
+Description of the database configuration block and it's options:
+* `teamspeak_db_plugin`: Setting the database plugin; Options: sqlite3,mariadb. Default: sqlite3.
+__This is only used if the db_plugin is mariadb.__
+* `teamspeak_db_ini_filename:` Database configuration file in the teamspeak server folder.
+* `teamspeak_db_ini_config.host`: MariaDB Hostname or IP for connection to the database server.
+* `teamspeak_db_ini_config.port`: MariaDB Port for hostname connection.
+* `teamspeak_db_ini_config.socket`: MariaDB Socket connection instate of hostname:port.
+* `teamspeak_db_ini_config.database`: MariaDB TeamSpeak database name.
+* `teamspeak_db_ini_config.username`: MariaDB Login username.
+* `teamspeak_db_ini_config.password`: MariaDB Login password.
+
+
 #### Other options
 
 * `teamspeak_ini_machine_id`: Teamspeak server machine ID. Used for running provide multiple instances on the same database with a unique ID. Default is empty.

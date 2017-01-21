@@ -1,7 +1,11 @@
 ---
-# install tasks file for teamspeak
-
 # Start of installation
+- name: "Install : MariaDB library"
+  apt:
+    name: libmariadb2
+    state: present
+  when: "teamspeak_db_plugin == 'mariadb'"
+
 - name: "Install : Create Teamspeak user"
   user:
     name: "{{ teamspeak.user }}"
