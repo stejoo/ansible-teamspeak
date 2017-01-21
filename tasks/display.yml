@@ -1,0 +1,29 @@
+---
+# configuration tasks for teamspeak
+
+# This task prints information a TeamSpeak 3 server admin needs to log in to 
+# the newly installed TeamSpeak 3 Server.
+
+- name: "Display : Wait until TeamSpeak 3 ServerQuery is open"
+  wait_for:
+    port: "{{ teamspeak_network.query.port }}"
+    timeout: 10 
+
+- name: "Display : Fetch the password of the Server Query Admin Account"
+  shell: journalctl --unit teamspeak3-server.service --reverse | awk -F'"' '/password=/ { print $4; exit }'
+  register: __ts3_serveradmin_password
+  changed_when: False
+
+- name: "Display : Show the Server Query Admin Account password"
+  debug: 
+    msg: "serveradmin password: {{ __ts3_serveradmin_password.stdout }}"
+
+- block:
+  - name: "Display : Fetch the ServerAdmin privilege key (token)"
+    shell: journalctl --unit teamspeak3-server.service --reverse | awk -F'=' '/token=/ { print $2 ; exit}'
+    register: __ts3_default_priv_token
+    changed_when: False
+  - name: "Display : Show the ServerAdmin privilege key"
+    debug: 
+      msg: "token: {{ __ts3_default_priv_token.stdout }}"
+  when: teamspeak_create_default_virtualserver
