@@ -14,3 +14,11 @@ licensepath={{ teamspeak_licensepath }}/
 {% if teamspeak_machine_id is not none %}
 machine_id={{ teamspeak_machine_id }}
 {% endif %}
+
+{% if teamspeak_db_plugin == 'mariadb' %}
+dbplugin=ts3db_mariadb
+dbpluginparameter={{ teamspeak_db_ini_filename }}
+dbsqlpath=sql/
+dbsqlcreatepath=create_mariadb/
+query_skipbruteforcecheck=0
+{% endif %}
