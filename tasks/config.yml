@@ -22,3 +22,33 @@
     notify:
       - Restart TeamSpeak 3 Server
   when: "teamspeak_db_plugin == 'mariadb'"
+
+- name: "Configuration : Start TeamSpeak 3 Server"
+  service:
+    name: teamspeak3-server
+    state: started
+  register: __ts3_service_started
+
+- name: "Configuration : Wait until TeamSpeak 3 ServerQuery is open"
+  wait_for:
+    port: "{{ teamspeak_network.query.port }}"
+    timeout: 10 
+  when: __ts3_service_started.changed
+
+- name: "Configuration : Fetch ServerAdmin Password"
+  shell: 'journalctl -u teamspeak3-server.service --since today | grep -oEi "password= \"(.*)\"" | cut -d\" -f2 | tail -n1'
+  register: __ts3_serveradmin_password
+  when: __ts3_service_started.changed
+
+- debug: 
+    msg: "ServerAdmin Password: {{ __ts3_serveradmin_password.stdout }}"
+  when: __ts3_service_started.changed
+
+- block:
+  - name: "Configuration : Fetch default server privilege token"
+    shell: 'journalctl -u teamspeak3-server.service --since today | grep -oEi "token=(.*)" | cut -d= -f2 | tail -n1'
+    register: __ts3_default_priv_token
+  - debug: 
+      msg: "Default virtualserver privilege token: {{ __ts3_default_priv_token.stdout }}"
+  when: teamspeak_create_default_virtualserver and __ts3_service_started.changed
+
