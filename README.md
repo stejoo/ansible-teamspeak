@@ -68,6 +68,7 @@ Description of the `teamspeak_network` configuration block and it's options:
 #### Database configuration
 
 The database configuration block is for setting the database. Supported: sqlite (default), mariadb. MySQL support has been deprecated from server version 3.0.11.
+MariaDB connection only works with a vaild teamspeak license.
 
 Description of the database configuration block and it's options:
 * `teamspeak_db_plugin`: Setting the database plugin; Options: sqlite3,mariadb. Default: sqlite3.
