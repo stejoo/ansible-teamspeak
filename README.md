@@ -94,5 +94,5 @@ MIT
 
 ## Author Information
 
-* Stefan Joosten <stefan@sjoosten.nl>
-* Egbert Verhage <egbert@eggiecode.org>
+* Stefan Joosten `<stefan•ɑƬ•joosten•ɖɵʈ•nl>`
+* Egbert Verhage `<egbert•ɑƬ•eggiecode•ɖɵʈ•org>`
