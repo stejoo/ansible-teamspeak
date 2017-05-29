@@ -62,4 +62,4 @@
 # Display Teamspeak 3 Server Token and Password if this is a new installation
 # (a new installation has no userdata, and this is checked for in install.yml)
 - include: display.yml
-  when: userdata.stat.exists is defined and userdata.stat.exists == False
+  when: userdata.stat is defined and userdata.stat.exists == False
