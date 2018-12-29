@@ -33,6 +33,17 @@
     path: "{{ ts3server_dir }}/licensekey.dat"
     state: absent
   when: not teamspeak_use_license
+
+  # Accept the default license that comes with the software when not using a bought one
+- name: "License : Accept default TeamSpeak 3 Server license"
+  file:
+    path: "{{ ts3server_dir }}/.ts3server_license_accepted"
+    state: touch
+    owner: "{{ teamspeak.user }}"
+    group: "{{ teamspeak.user }}"
+    mode: 0444
+    modification_time: "preserve"
+    access_time: "preserve"
 # End of license file management
 
 # Configuration of TeamSpeak 3 Server (if requested)
