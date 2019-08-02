@@ -7,8 +7,8 @@ teamspeak:
   home: "/opt/teamspeak"
   shell: "/usr/sbin/nologin"
   symlink: "current"
-  version: "3.5.1"
-  checksum: "sha256:aa991a7b88f4d6e24867a98548b808c093771b85443f986c8adb09e78e41eb79"
+  version: "3.9.1"
+  checksum: "sha256:0a0497d6a8e5f3f48e10db8f89875286d6aa3388f171f828cf5d426cf305f16f"
   keep: 3
 
 teamspeak_ini_enabled: no
