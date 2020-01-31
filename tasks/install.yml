@@ -45,7 +45,7 @@
     dest: "{{ teamspeak.home }}/teamspeak3-server_linux_amd64-{{ teamspeak.version }}/"
     owner: "{{ teamspeak.user }}"
     group: "{{ teamspeak.user }}"
-  when: mkdir.changed
+  when: mkdir.changed and not ansible_check_mode
 
 - name: "Install : Create/Update symlink to TeamSpeak {{ teamspeak.version }} Server"
   file:
@@ -54,6 +54,7 @@
     state: link
     owner: "{{ teamspeak.user }}"
     group: "{{ teamspeak.user }}"
+  when: not ansible_check_mode
   notify:
     - Restart TeamSpeak 3 Server
 
