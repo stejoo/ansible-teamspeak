@@ -2,14 +2,15 @@
 # tasks file for teamspeak
 
 - name: "Load OS specific variables"
-  include_vars: "{{ item }}"
-  with_first_found: 
-    - files: 
+  include_vars: "{{ lookup('first_found', params) }}"
+  vars:
+    params:
+      files:
         - "{{ ansible_distribution|lower }}.yml"
         - "{{ ansible_os_family|lower }}.yml"
         - "{{ ansible_system|lower }}.yml"
         - main.yml
-      paths: 
+      paths:
         - ../vars
 
 # Installation of TeamSpeak 3 Server 
