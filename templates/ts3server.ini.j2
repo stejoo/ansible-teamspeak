@@ -5,6 +5,8 @@ filetransfer_ip={{ teamspeak_network.filetransfer.ip }}
 query_port={{ teamspeak_network.query.port }}
 query_ip={{ teamspeak_network.query.ip }}
 
+query_protocols=raw{% if teamspeak_query_ssh_enabled %}, ssh{% endif %}
+
 create_default_virtualserver={{ '1' if teamspeak_create_default_virtualserver else '0' }}
 
 {% if teamspeak_use_license and teamspeak_licensepath is not none %}
@@ -12,4 +14,10 @@ licensepath={{ teamspeak_licensepath }}/
 {% endif %}
 {% if teamspeak_machine_id is not none %}
 machine_id={{ teamspeak_machine_id }}
+{% endif %}
+
+{% if teamspeak_query_ssh_enabled %}
+query_ssh_ip={{ teamspeak_network.query_ssh.ip }}
+query_ssh_port={{ teamspeak_network.query_ssh.port }}
+query_ssh_rsa_host_key=ssh_host_rsa_key
 {% endif %}
