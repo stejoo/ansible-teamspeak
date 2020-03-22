@@ -21,13 +21,13 @@ teamspeak_licensepath:
 teamspeak_network:
   voice:
     default_port: 9987
-    ip: 0.0.0.0
+    ip: "0.0.0.0, ::"
   filetransfer:
     port: 30033 
-    ip: 0.0.0.0
+    ip: "0.0.0.0, ::"
   query:
     port: 10011
-    ip: 0.0.0.0
+    ip: "0.0.0.0, ::"
 
 teamspeak_create_default_virtualserver: yes
 teamspeak_machine_id:
