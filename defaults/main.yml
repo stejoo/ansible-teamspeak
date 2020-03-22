@@ -35,4 +35,4 @@ teamspeak_network:
 teamspeak_create_default_virtualserver: yes
 teamspeak_machine_id:
 
-teamspeak_query_ssh_enabled: no
+teamspeak_query_ssh_enabled: yes
