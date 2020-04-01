@@ -13,6 +13,6 @@
     dest: "{{ teamspeak_licensepath if teamspeak_licensepath is not none else ts3server_dir }}/licensekey.dat"
     owner: "{{ teamspeak.user }}"
     group: "{{ teamspeak.user }}"
-    mode: 0400
+    mode: 0600
   notify:
     - Restart TeamSpeak 3 Server
