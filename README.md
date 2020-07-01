@@ -26,28 +26,34 @@ For simple installations, the defaults do not need to be changed. But in case yo
 
 These variables define properties for the user thats going to run the TeamSpeak 3 Server, which version of TeamSpeak 3 Server will be installed and at what location on the disk. 
 
-* `teamspeak.user`: User to run the teamspeak server. Defaults to "teamspeak".
-* `teamspeak.comment`: User comment field. Defaults to "Teamspeak 3 user".
-* `teamspeak.home`: Home directory for the teamspeak user. Will also be used to install the teamspeak server in. Defaults to "/opt/teamspeak".
-* `teamspeak.shell`: Shell for the teamspeak user. Defaults to "/usr/sbin/nologin".
-* `teamspeak.symlink`: Name of symlink to point to current TeamSpeak 3 server directory. Defaults to "current".
-* `teamspeak.version`: Version of Teamspeak 3 Server to install. Defaults to "3.11.0".
-* `teamspeak.checksum`: SHA256 checksum of archive of TeamSpeak 3 server version for verification purposes. Example: "sha256:18c63ed4a3dc7422e677cbbc335e8cbcbb27acd569e9f2e1ce86e09642c81aa2"
-* `teamspeak.keep`: Amount of TeamSpeak 3 server versions to keep installed, includes the currently installed version. A setting of "3" keeps the current and two previous version installed, which is the default. In case an upgrade goes wrong, you simply rewind the `teamspeak.version` and `teamspeak.checksum` to the older version and run the role again to downgrade back to a known good.
+| Variable             | Default                 | Description                                                                                                                                                                                                                                                                                                                                                                      |
+|----------------------|-------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `teamspeak.user`     | `teamspeak`             | User to run the TeamSpeak server.                                                                                                                                                                                                                                                                                                                                                |
+| `teamspeak.comment`  | `TeamSpeak 3 User`      | User comment field.                                                                                                                                                                                                                                                                                                                                                              |
+| `teamspeak.home`     | `/opt/teamspeak`        | Home directory for the TeamSpeak user. Will also be used to install the TeamSpeak server in.                                                                                                                                                                                                                                                                                     |
+| `teamspeak.shell`    | `/usr/sbin/nologin`     | Shell for the `teamspeak` user.                                                                                                                                                                                                                                                                                                                                                    |
+| `teamspeak.symlink`  | `current`               | Name of symlink to point to current TeamSpeak 3 server directory.                                                                                                                                                                                                                                                                                                                |
+| `teamspeak.version`  | see `defaults/main.yml` | Version of TeamSpeak 3 Server to download and install.                                                                                                                                                                                                                                                                                                                           |
+| `teamspeak.checksum` | see `defaults/main.yml` | SHA256 checksum of archive of TeamSpeak 3 server version for verification purposes.                                                                                                                                                                                                                                                                                              |
+| `teamspeak.keep`     | 3                       | Amount of TeamSpeak 3 server versions to keep installed, includes the currently installed version. A setting of "3" keeps the current and two previous version installed, which is the default. In case an upgrade goes wrong, you simply rewind the `teamspeak.version` and `teamspeak.checksum` to the older version and run the role again to downgrade back to a known good. |
 
 ### Further configuraton
 To configure TeamSpeak 3 Server a INI-style configuration file is used. If you require detailed configuration, enable creation of such a file by setting the `teamspeak_ini_enabled` to `yes`. For example by defining it that way in host or group vars in your playbook. A INI file containing your configuration will be created.  
 
-* `teamspeak_ini_enabled`: Set to `yes` if you want use the configuration options listed below. It will create INI-style configuration file for the TeamSpeak 3 Server to use. Defaults to `no`.
-* `teamspeak_ini_filename`: Name of the INI-style configuration file. Defaults to `ts3server.ini`.
+| Variable                 | Default         | Description                                                                                                                                         |
+|--------------------------|-----------------|-----------------------------------------------------------------------------------------------------------------------------------------------------|
+| `teamspeak_ini_enabled`  | `no`            | Set to `yes` if you want use the configuration options listed below. It will create INI-style configuration file for the TeamSpeak 3 Server to use. |
+| `teamspeak_ini_filename` | `ts3server.ini` | Name of the INI-style configuration file.                                                                                                           |
 
 #### License file
 
 If you have a TeamSpeak 3 Server license, you can have this role install it for you. Place your license file called `licensekey.dat` in the `files/` directory of this role. Tip: if you use Git, add that path to your `.gitignore` to make sure you do not push it somewhere by accident. 
 
-* `teamspeak_use_license`: Set to `yes` to have your license set up. Default is `no`.
-* `teamspeak_license_srcfile`: TeamSpeak 3 Server license file on Ansible host to copy to target. Default searches for the license file at `files/licensekey.dat`
-* `teamspeak_licensepath`: Used to specify a directory where your license should be located on the target host. If a non-existent directory is specified it will be created for you. Make sure you enable the use of a INI configuration file, otherwise this option will be ineffective. The default is to leave this variable empty, which will place the license file in the same directory as the TeamSpeak 3 Server is installed in.  
+| Variable                    | Default                | Description                                                                                                                                                                                                                                                                                                                                                                                                    |
+|-----------------------------|------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `teamspeak_use_license`     | `no`                   | Set to `yes` to have your license set up.                                                                                                                                                                                                                                                                                                                                                                      |
+| `teamspeak_license_srcfile` | `files/licensekey.dat` | TeamSpeak 3 Server license file on Ansible host to copy to target. Default searches for the license file at `files/licensekey.dat`.                                                                                                                                                                                                                                                                            |
+| `teamspeak_licensepath`     |                        | Used to specify a directory where your license should be located on the target host. If a non-existent directory is specified it will be created for you. Make sure you enable the use of a INI configuration file, otherwise this option will be ineffective. The default is to leave this variable empty, which will place the license file in the same directory as the TeamSpeak 3 Server is installed in. |
 
 #### Network configuration
 
@@ -55,30 +61,36 @@ The network configuration block can be used to configure the TeamSpeak 3 Server 
 
 Description of the `teamspeak_network` configuration block and it's options:
 
-* `teamspeak_network.voice`: Empty. Contains nested properties of the voice server. 
-* `teamspeak_network.voice.default_port`: UDP port for voice clients to connect to. Default at UDP port 9987.
-* `teamspeak_network.voice.ip`: IP address to listen on for incoming voice connections. Default at 0.0.0.0, which binds any IP address.
-* `teamspeak_network.filetransfer`: Empty. Contains nested properties of the file transfer server.
-* `teamspeak_network.filetransfer.port`: TCP port to use for file transfers. Default at TCP port 30033.
-* `teamspeak_network.filetransfer.ip`: IP address where file transfers are bound to. Default to 0.0.0.0, which binds any IP address.
-* `teamspeak_network.query`: Empty. Contains nested properties for the ServerQueries part of the server.
-* `teamspeak_network.query.port`: TCP port used for ServerQuery connections. Default at TCP port 10011.
-* `teamspeak_network.query.ip`: IP address where to listen for inbound ServerQuery connections. Default at 0.0.0.0, which binds any IP address.
+| Variable                               | Default | Description                                                          |
+|----------------------------------------|---------|----------------------------------------------------------------------|
+| `teamspeak_network.voice`              | Empty   | Contains nested properties of the voice server.                      |
+| `teamspeak_network.voice.default_port` | 9987    | UDP port for voice clients to connect to.                            |
+| `teamspeak_network.voice.ip`           | 0.0.0.0 | IP address to listen on for incoming voice connections.              |
+| `teamspeak_network.filetransfer`       | Empty   | Contains nested properties of the file transfer server.              |
+| `teamspeak_network.filetransfer.port`  | 30033   | TCP port to use for file transfers.                                  |
+| `teamspeak_network.filetransfer.ip`    | 0.0.0.0 | IP address where file transfers are bound to.                        |
+| `teamspeak_network.query`              | Empty   | Contains nested properties for the ServerQueries part of the server. |
+| `teamspeak_network.query.port`         | 10011   | TCP port used for ServerQuery connections.                           |
+| `teamspeak_network.query.ip`           | 0.0.0.0 | IP address where to listen for inbound ServerQuery connections.      |
 
 #### Other options
 
-* `teamspeak_ini_machine_id`: Teamspeak server machine ID. Used for running provide multiple instances on the same database with a unique ID. Default is empty.
-* `teamspeak_create_default_virtualserver`: Defaults to `yes`. Normally one virtual server is created automatically when the TeamSpeak 3 Server process is started. If you set this to `no` a virtual server will not be started upon startup and you would have to start one manually using the ServerQuery interface. 
+| Variable                                 | Default | Description                                                                                                                                                                                                                                              |
+|------------------------------------------|---------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `teamspeak_ini_machine_id`               | Empty   | Teamspeak server machine ID. Used for running provide multiple instances on the same database with a unique ID.                                                                                                                                          |
+| `teamspeak_create_default_virtualserver` | yes     | Normally one virtual server is created automatically when the TeamSpeak 3 Server process is started. If you set this to `no` a virtual server will not be started upon startup and you would have to start one manually using the ServerQuery interface. |
 
 #### OS-dependent variables
 
 Variables that differ across different Linux distributions have been set in `vars/{debian,redhat}.yml`:
 
-* `systemd_service_file_path`: Path where Systemd service files are installed.
+| Variable                                                                                                        | Default                        | Description                                     |
+|-----------------------------------------------------------------------------------------------------------------|--------------------------------|-------------------------------------------------|
+| Teamspeak server machine ID. Used for running provide multiple instances on the same database with a unique ID. | see `vars/{debian,redhat}.yml` | Path where systemd service files are installed. |
 
 ## Dependencies
 
-rsync should be installed on the host to perform TeamSpeak 3 Server upgrades, used by the "synchronize" module.
+`rsync` should be installed on the host to perform TeamSpeak 3 Server upgrades, used by the "synchronize" module.
 
 ## Example Playbook
 
