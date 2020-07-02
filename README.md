@@ -17,6 +17,7 @@ The upgrade mechanism can also be used for restoring TeamSpeak 3 servers from a 
 ## Requirements
 
 Tested on Ubuntu 16.04.1.
+Tested on Ubuntu 18.04.4.
 
 ## Role Variables
 
