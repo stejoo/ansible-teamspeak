@@ -13,5 +13,5 @@
 - name: Prune older TeamSpeak 3 Server versions
   shell: "{{ item }}"
   loop:
-    - find {{ teamspeak.home }}/teamspeak3-server_linux_amd64-* -maxdepth 0 -type d | sort -V | head -n-{{ teamspeak.keep }} | xargs rm -rf
-    - find {{ teamspeak.home }}/teamspeak3-server_linux_amd64-*.tar.bz2 -type f | sort -V | head -n-{{ teamspeak.keep }} | xargs rm -f
+    - find {{ teamspeak_home }}/teamspeak3-server_linux_amd64-* -maxdepth 0 -type d | sort -V | head -n-{{ teamspeak_keep }} | xargs rm -rf
+    - find {{ teamspeak_home }}/teamspeak3-server_linux_amd64-*.tar.bz2 -type f | sort -V | head -n-{{ teamspeak_keep }} | xargs rm -f

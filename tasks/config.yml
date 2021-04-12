@@ -6,7 +6,7 @@
     src: ts3server.ini.j2 
     dest: "{{ ts3server_dir }}/{{ teamspeak_ini_filename }}"
     mode: 0644
-    owner: "{{ teamspeak.user }}"
-    group: "{{ teamspeak.user }}"
+    owner: "{{ teamspeak_user }}"
+    group: "{{ teamspeak_user }}"
   notify:
     - Restart TeamSpeak 3 Server
