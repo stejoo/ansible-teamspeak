@@ -19,7 +19,7 @@
 # Store the TeamSpeak 3 Server directory in a short variable
 - name: "Set TeamSpeak 3 Server directory fact"
   set_fact:
-    ts3server_dir: "{{ teamspeak.home }}/{{ teamspeak.symlink }}/teamspeak3-server_linux_amd64"
+    ts3server_dir: "{{ teamspeak_home }}/{{ teamspeak_symlink }}/teamspeak3-server_linux_amd64"
 
 # License file management
   # Install a license file 
@@ -40,8 +40,8 @@
   file:
     path: "{{ ts3server_dir }}/.ts3server_license_accepted"
     state: touch
-    owner: "{{ teamspeak.user }}"
-    group: "{{ teamspeak.user }}"
+    owner: "{{ teamspeak_user }}"
+    group: "{{ teamspeak_user }}"
     mode: 0444
     modification_time: "preserve"
     access_time: "preserve"
@@ -55,7 +55,7 @@
   # Clean-up a lingering configuration file if we don't need it anymore
 - name: "Configuration : Clean-up old configuration file if needed"
   file:
-    path: "{{ teamspeak.home }}/{{ teamspeak.symlink }}/teamspeak3-server_linux_amd64/{{ teamspeak_ini_filename }}"
+    path: "{{ teamspeak_home }}/{{ teamspeak_symlink }}/teamspeak3-server_linux_amd64/{{ teamspeak_ini_filename }}"
     state: absent
   when: not teamspeak_ini_enabled
 # End of configuration

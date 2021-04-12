@@ -1,15 +1,14 @@
 ---
 # defaults file for teamspeak
 
-teamspeak:
-  user: "teamspeak"
-  comment: "Teamspeak 3 user"
-  home: "/opt/teamspeak"
-  shell: "/usr/sbin/nologin"
-  symlink: "current"
-  version: "3.13.3"
-  checksum: "sha256:f9bf52d1e9109971792b0bd57261c80e9a7489944ed96d65b3c798843ce3514c"
-  keep: 3
+teamspeak_user: "teamspeak"
+teamspeak_comment: "Teamspeak 3 user"
+teamspeak_home: "/opt/teamspeak"
+teamspeak_shell: "/usr/sbin/nologin"
+teamspeak_symlink: "current"
+teamspeak_version: "3.13.3"
+teamspeak_checksum: "sha256:f9bf52d1e9109971792b0bd57261c80e9a7489944ed96d65b3c798843ce3514c"
+teamspeak_keep: 3
 
 teamspeak_ini_enabled: no
 teamspeak_ini_filename: ts3server.ini

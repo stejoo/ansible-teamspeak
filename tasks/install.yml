@@ -4,32 +4,32 @@
 # Start of installation
 - name: "Install : Create Teamspeak user"
   user:
-    name: "{{ teamspeak.user }}"
-    comment: "{{ teamspeak.comment }}"
-    home: "{{ teamspeak.home }}"
-    shell: "{{ teamspeak.shell }}"
+    name: "{{ teamspeak_user }}"
+    comment: "{{ teamspeak_comment }}"
+    home: "{{ teamspeak_home }}"
+    shell: "{{ teamspeak_shell }}"
     system: yes
 
-- name: "Install : Download TeamSpeak {{ teamspeak.version }} Server files"
+- name: "Install : Download TeamSpeak {{ teamspeak_version }} Server files"
   get_url:
-    url: "https://files.teamspeak-services.com/releases/server/{{ teamspeak.version }}/teamspeak3-server_linux_amd64-{{ teamspeak.version }}.tar.bz2"
-    dest: "{{ teamspeak.home }}/teamspeak3-server_linux_amd64-{{ teamspeak.version }}.tar.bz2"
-    checksum: "{{ teamspeak.checksum }}"
-    owner: "{{ teamspeak.user }}"
-    group: "{{ teamspeak.user }}"
+    url: "https://files.teamspeak-services.com/releases/server/{{ teamspeak_version }}/teamspeak3-server_linux_amd64-{{ teamspeak_version }}.tar.bz2"
+    dest: "{{ teamspeak_home }}/teamspeak3-server_linux_amd64-{{ teamspeak_version }}.tar.bz2"
+    checksum: "{{ teamspeak_checksum }}"
+    owner: "{{ teamspeak_user }}"
+    group: "{{ teamspeak_user }}"
 
-- name: "Install : Create TeamSpeak {{ teamspeak.version }} Server directory"
+- name: "Install : Create TeamSpeak {{ teamspeak_version }} Server directory"
   file:
-    path: "{{ teamspeak.home }}/teamspeak3-server_linux_amd64-{{ teamspeak.version }}"
+    path: "{{ teamspeak_home }}/teamspeak3-server_linux_amd64-{{ teamspeak_version }}"
     state: directory
-    owner: "{{ teamspeak.user }}"
-    group: "{{ teamspeak.user }}"
+    owner: "{{ teamspeak_user }}"
+    group: "{{ teamspeak_user }}"
   register: mkdir
 
 # If a new directory has been created, check for (current) user data.
 - name: "Install : Checking for a currently installed TeamSpeak 3 Server with user data"
   stat:
-    path: "{{ teamspeak.home }}/{{ teamspeak.symlink }}/teamspeak3-server_linux_amd64/files"
+    path: "{{ teamspeak_home }}/{{ teamspeak_symlink }}/teamspeak3-server_linux_amd64/files"
   register: userdata
   when: mkdir.changed
 
@@ -38,22 +38,22 @@
   when: userdata.stat is defined and userdata.stat.exists == True
 
 # Created a new directory? Extract the files into it. Overwrites existing.
-- name: "Install : Extract TeamSpeak {{ teamspeak.version }} Server files"
+- name: "Install : Extract TeamSpeak {{ teamspeak_version }} Server files"
   unarchive:
     copy: no
-    src: "{{ teamspeak.home }}/teamspeak3-server_linux_amd64-{{ teamspeak.version }}.tar.bz2"
-    dest: "{{ teamspeak.home }}/teamspeak3-server_linux_amd64-{{ teamspeak.version }}/"
-    owner: "{{ teamspeak.user }}"
-    group: "{{ teamspeak.user }}"
+    src: "{{ teamspeak_home }}/teamspeak3-server_linux_amd64-{{ teamspeak_version }}.tar.bz2"
+    dest: "{{ teamspeak_home }}/teamspeak3-server_linux_amd64-{{ teamspeak_version }}/"
+    owner: "{{ teamspeak_user }}"
+    group: "{{ teamspeak_user }}"
   when: mkdir.changed and not ansible_check_mode
 
-- name: "Install : Create/Update symlink to TeamSpeak {{ teamspeak.version }} Server"
+- name: "Install : Create/Update symlink to TeamSpeak {{ teamspeak_version }} Server"
   file:
-    src: "{{ teamspeak.home }}/teamspeak3-server_linux_amd64-{{ teamspeak.version }}"
-    dest: "{{ teamspeak.home }}/{{ teamspeak.symlink }}"
+    src: "{{ teamspeak_home }}/teamspeak3-server_linux_amd64-{{ teamspeak_version }}"
+    dest: "{{ teamspeak_home }}/{{ teamspeak_symlink }}"
     state: link
-    owner: "{{ teamspeak.user }}"
-    group: "{{ teamspeak.user }}"
+    owner: "{{ teamspeak_user }}"
+    group: "{{ teamspeak_user }}"
   when: not ansible_check_mode
   notify:
     - Restart TeamSpeak 3 Server

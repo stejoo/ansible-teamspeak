@@ -4,13 +4,13 @@ After=network.target
 
 [Service]
 Type=simple
-User={{ teamspeak.user }}
-Group={{ teamspeak.user }}
-WorkingDirectory={{ teamspeak.home }}/{{ teamspeak.symlink }}/teamspeak3-server_linux_amd64
+User={{ teamspeak_user }}
+Group={{ teamspeak_user }}
+WorkingDirectory={{ teamspeak_home }}/{{ teamspeak_symlink }}/teamspeak3-server_linux_amd64
 {% if teamspeak_ini_enabled %}
-ExecStart={{ teamspeak.home }}/{{ teamspeak.symlink }}/teamspeak3-server_linux_amd64/ts3server_minimal_runscript.sh inifile={{ teamspeak_ini_filename }}
+ExecStart={{ teamspeak_home }}/{{ teamspeak_symlink }}/teamspeak3-server_linux_amd64/ts3server_minimal_runscript.sh inifile={{ teamspeak_ini_filename }}
 {% else %}
-ExecStart={{ teamspeak.home }}/{{ teamspeak.symlink }}/teamspeak3-server_linux_amd64/ts3server_minimal_runscript.sh
+ExecStart={{ teamspeak_home }}/{{ teamspeak_symlink }}/teamspeak3-server_linux_amd64/ts3server_minimal_runscript.sh
 {% endif %}
 
 [Install]

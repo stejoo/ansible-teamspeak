@@ -11,8 +11,8 @@
   copy:
     src: "{{ teamspeak_license_srcfile }}"
     dest: "{{ teamspeak_licensepath if teamspeak_licensepath is not none else ts3server_dir }}/licensekey.dat"
-    owner: "{{ teamspeak.user }}"
-    group: "{{ teamspeak.user }}"
+    owner: "{{ teamspeak_user }}"
+    group: "{{ teamspeak_user }}"
     mode: 0600
   notify:
     - Restart TeamSpeak 3 Server
