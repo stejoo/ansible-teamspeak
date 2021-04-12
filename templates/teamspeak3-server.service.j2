@@ -8,6 +8,7 @@ User={{ teamspeak_user }}
 Group={{ teamspeak_user }}
 WorkingDirectory={{ teamspeak_home }}/{{ teamspeak_symlink }}/teamspeak3-server_linux_amd64
 {% if teamspeak_ini_enabled %}
+ExecStartPre=/bin/sh -c 'until ping -c1 google.com; do sleep 1; done;'
 ExecStart={{ teamspeak_home }}/{{ teamspeak_symlink }}/teamspeak3-server_linux_amd64/ts3server_minimal_runscript.sh inifile={{ teamspeak_ini_filename }}
 {% else %}
 ExecStart={{ teamspeak_home }}/{{ teamspeak_symlink }}/teamspeak3-server_linux_amd64/ts3server_minimal_runscript.sh
