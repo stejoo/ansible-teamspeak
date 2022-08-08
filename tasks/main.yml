@@ -13,6 +13,11 @@
       paths:
         - ../vars
 
+- name: Install packages to unpack tar.bz2
+  package:
+    name: bzip2
+    state: present
+
 # Installation of TeamSpeak 3 Server 
 - import_tasks: install.yml
 
