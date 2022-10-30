@@ -16,8 +16,11 @@ The upgrade mechanism can also be used for restoring TeamSpeak 3 servers from a 
 
 ## Requirements
 
-Tested on Ubuntu 16.04.1.
-Tested on Ubuntu 18.04.4.
+Tested on Ubuntu 18.04.6.
+Tested on Ubuntu 20.04.4.
+Tested on Ubuntu 22.04.1.
+
+Tested with Ansible [core 2.13.2]
 
 ## Role Variables
 

@@ -34,7 +34,7 @@
   when: mkdir.changed
 
 # If user data has been found, this is an upgrade situation.
-- include: ts3update.yml
+- import_tasks: ts3update.yml
   when: userdata.stat is defined and userdata.stat.exists == True
 
 # Created a new directory? Extract the files into it. Overwrites existing.
