@@ -1,0 +1,8 @@
+## Linguist: treat YAML as code instead of data
+*.yml linguist-detectable=true
+
+## Git Settings
+# text=auto : Autodetect text files that are checked into the repo to normalize line endings
+# eol=lf    : Normalize line endings to LF
+* text=auto  eol=lf
+
